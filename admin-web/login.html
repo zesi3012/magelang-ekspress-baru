@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Admin | Magelang Ekspress</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #172033;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 36px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+    }
+
+    .brand {
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .brand-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      margin-bottom: 14px;
+      border-radius: 16px;
+      background: #173f72;
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 23px;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      border: 0;
+      border-radius: 9px;
+      background: #173f72;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    #message {
+      display: none;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #fef2f2;
+      color: #b91c1c;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <main class="login-card">
+    <div class="brand">
+      <div class="brand-icon">M</div>
+      <h1>Magelang Ekspress</h1>
+      <p class="subtitle">Masuk ke panel administrasi E-Paper</p>
+    </div>
+
+    <form id="loginForm">
+      <label for="email">Email administrator</label>
+      <input
+        id="email"
+        type="email"
+        autocomplete="username"
+        placeholder="Masukkan email admin"
+        required
+      >
+
+      <label for="password">Kata sandi</label>
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Masukkan kata sandi"
+        required
+      >
+
+      <button id="loginButton" type="submit">Masuk</button>
+      <div id="message" role="alert"></div>
+    </form>
+
+    <div class="footer">
+      © <span id="year"></span> Magelang Ekspress
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>
