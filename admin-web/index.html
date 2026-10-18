@@ -875,6 +875,277 @@
         grid-template-columns: 1fr;
       }
     }
+    
+/* ===== Perbaikan tabel Manajemen Pengguna ===== */
+
+#usersListContainer {
+  width: 100%;
+  min-width: 0;
+}
+
+#usersListContainer .table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 0 0 10px 10px;
+}
+
+#usersListContainer table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+#usersListContainer th {
+  padding: 14px 18px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+#usersListContainer td {
+  padding: 14px 18px;
+  vertical-align: middle;
+}
+
+#usersListContainer tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+#usersListContainer tbody tr:hover {
+  background: rgba(60, 114, 184, 0.07);
+}
+
+#usersListContainer .actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  white-space: nowrap;
+}
+
+#usersListContainer .actions button {
+  appearance: none;
+  border: 1px solid var(--line, #e7ebf1);
+  border-radius: 7px;
+  padding: 7px 12px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+#usersListContainer .actions [data-edit-user] {
+  background: #edf4ff;
+  border-color: #c9dcfb;
+  color: #245da6;
+}
+
+#usersListContainer .actions [data-edit-user]:hover {
+  background: #dceaff;
+  border-color: #9dbfee;
+}
+
+#usersListContainer .actions [data-toggle-user] {
+  background: #fff4e8;
+  border-color: #f1d2ad;
+  color: #9a5717;
+}
+
+#usersListContainer .actions [data-toggle-user]:hover {
+  background: #ffe8d0;
+  border-color: #e6b780;
+}
+
+#usersListContainer .pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#usersListContainer .pill.published {
+  background: #e7f7ee;
+  color: #18794e;
+}
+
+#usersListContainer .pill.draft {
+  background: #f2f4f7;
+  color: #667085;
+}
+
+#usersListContainer .table-footer {
+  padding: 14px 18px;
+  border-top: 1px solid var(--line, #e7ebf1);
+  color: var(--muted, #758195);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ===== Perapian halaman Manajemen Kategori ===== */
+
+#categories .page-heading,
+#categoriesPage .page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+#categories .page-heading h2,
+#categoriesPage .page-heading h2 {
+  margin: 5px 0 8px;
+  font-size: 26px;
+  line-height: 1.3;
+  font-weight: 750;
+  color: var(--text, #243b53);
+}
+
+#categories .page-heading p,
+#categoriesPage .page-heading p {
+  margin: 0;
+  color: var(--muted, #8293a5);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+#categories .eyebrow,
+#categoriesPage .eyebrow {
+  margin-bottom: 6px;
+  color: var(--blue, #1769aa);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+#categories .page-heading .btn,
+#categoriesPage .page-heading .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 11px 17px;
+  border: 1px solid var(--blue, #1769aa);
+  border-radius: 9px;
+  background: var(--blue, #1769aa);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+}
+
+#categories .page-heading .btn:hover,
+#categoriesPage .page-heading .btn:hover {
+  background: var(--navy, #102a43);
+  transform: translateY(-1px);
+}
+
+#categories .panel,
+#categoriesPage .panel {
+  margin-top: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border, #e4eaf1);
+  border-radius: 12px;
+  background: var(--white, #fff);
+}
+
+#categories .toolbar,
+#categoriesPage .toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 18px;
+  border-bottom: 1px solid var(--border, #e4eaf1);
+}
+
+#categories .toolbar-left,
+#categoriesPage .toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+#categories .search-field,
+#categoriesPage .search-field {
+  width: min(100%, 380px);
+  min-height: 42px;
+  padding: 10px 13px;
+  border: 1px solid var(--border, #e4eaf1);
+  border-radius: 8px;
+  background: var(--white, #fff);
+  color: var(--text, #243b53);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+#categories .search-field:focus,
+#categoriesPage .search-field:focus {
+  border-color: var(--blue, #1769aa);
+  box-shadow: 0 0 0 3px rgba(23, 105, 170, .12);
+}
+
+#categories .toolbar .btn,
+#categoriesPage .toolbar .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 1px solid var(--border, #e4eaf1);
+  border-radius: 8px;
+  background: var(--white, #fff);
+  color: var(--text, #243b53);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#categories .toolbar .btn:hover,
+#categoriesPage .toolbar .btn:hover {
+  background: var(--background, #f4f7fb);
+}
+
+@media (max-width: 600px) {
+  #categories .page-heading,
+  #categoriesPage .page-heading {
+    align-items: stretch;
+  }
+
+  #categories .page-heading .btn,
+  #categoriesPage .page-heading .btn {
+    width: 100%;
+  }
+
+  #categories .toolbar-left,
+  #categoriesPage .toolbar-left {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #categories .search-field,
+  #categoriesPage .search-field {
+    width: 100%;
+  }
+}
+
   </style>
 </head>
 

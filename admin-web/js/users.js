@@ -1,6 +1,7 @@
 
 (function () {
   "use strict";
+  console.log("users.js berhasil dijalankan");
 
   const config = window.ADMIN_CONFIG;
 
@@ -17,74 +18,68 @@
   const $ = (id) => document.getElementById(id);
 
   let users = [];
+  let editingUserId = null;
 
+  async function apiRequest(path, options = {}) {
+    const { data, error } = await client.auth.getSession();
 
-async function apiRequest(path, options = {}) {
-  const { data, error } = await client.auth.getSession();
-
-  if (error) {
-    throw new Error("Gagal memeriksa sesi login: " + error.message);
-  }
-
-  if (!data.session) {
-    window.location.replace("login.html");
-    throw new Error("Sesi login tidak ditemukan. Silakan login kembali.");
-  }
-
-  const baseUrl = String(config.API_BASE_URL || "").replace(/\/+$/, "");
-
-  if (!baseUrl) {
-    throw new Error("API_BASE_URL belum diatur di js/config.js.");
-  }
-
-  const response = await fetch(`${baseUrl}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${data.session.access_token}`,
-      "apikey": config.SUPABASE_PUBLISHABLE_KEY,
-      ...(options.headers || {})
+    if (error) {
+      throw new Error("Gagal memeriksa sesi: " + error.message);
     }
-  });
 
-  // Baca respons sebagai teks dahulu agar respons kosong tidak
-  // langsung menimbulkan error Unexpected end of JSON input.
-  const responseText = await response.text();
-  let result = null;
+    if (!data.session) {
+      window.location.replace("login.html");
+      throw new Error("Sesi login tidak ditemukan.");
+    }
 
-  if (responseText.trim() !== "") {
-    try {
-      result = JSON.parse(responseText);
-    } catch {
+    const baseUrl = String(config.API_BASE_URL || "").replace(/\/+$/, "");
+
+    if (!baseUrl) {
+      throw new Error("API_BASE_URL belum diatur di js/config.js.");
+    }
+
+    const response = await fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${data.session.access_token}`,
+        "apikey": config.SUPABASE_PUBLISHABLE_KEY,
+        ...(options.headers || {})
+      }
+    });
+
+    const responseText = await response.text();
+    let result = null;
+
+    if (responseText.trim()) {
+      try {
+        result = JSON.parse(responseText);
+      } catch {
+        throw new Error(
+          `Respons backend bukan JSON (HTTP ${response.status}). ` +
+          responseText.slice(0, 200)
+        );
+      }
+    }
+
+    if (!response.ok) {
       throw new Error(
-        `Respons backend bukan JSON (HTTP ${response.status}). ` +
-        `Periksa URL API atau error PHP. Respons: ` +
-        responseText.slice(0, 250)
+        result?.message ||
+        result?.error ||
+        `Permintaan gagal (HTTP ${response.status}).`
       );
     }
+
+    if (result === null) {
+      throw new Error("Backend memberikan respons kosong.");
+    }
+
+    if (result.success === false) {
+      throw new Error(result.message || "Permintaan API gagal.");
+    }
+
+    return result;
   }
-
-  if (!response.ok) {
-    throw new Error(
-      result?.message ||
-      result?.error ||
-      `Permintaan API gagal (HTTP ${response.status}).`
-    );
-  }
-
-  if (result === null) {
-    throw new Error(
-      "Backend memberikan respons kosong. Periksa endpoint API."
-    );
-  }
-
-  if (result.success === false) {
-    throw new Error(result.message || "Permintaan API gagal.");
-  }
-
-  return result;
-}
-
 
   function showNotice(message, isError = false) {
     const notice = $("usersNotice");
@@ -105,6 +100,13 @@ async function apiRequest(path, options = {}) {
     })[char]);
   }
 
+  function isActive(user) {
+    return user.is_active === true ||
+      user.is_active === 1 ||
+      user.is_active === "1" ||
+      user.is_active === "true";
+  }
+
   function roleLabel(role) {
     return ({
       super_admin: "Super Admin",
@@ -113,209 +115,341 @@ async function apiRequest(path, options = {}) {
     })[role] || role || "-";
   }
 
-  function renderUsers() {
-    const rows = $("usersRows");
-    if (!rows) return;
+  function updateStatistics() {
+    const total = users.length;
+    const active = users.filter(isActive).length;
+    const admins = users.filter(
+      user => ["admin", "super_admin"].includes(user.role)
+    ).length;
+    const authors = users.filter(user => user.role === "author").length;
 
-    const search = ($("usersSearch")?.value || "").toLowerCase().trim();
+    if ($("usersTotalCount")) {
+      $("usersTotalCount").textContent = total;
+    }
+
+    if ($("usersActiveCount")) {
+      $("usersActiveCount").textContent = active;
+    }
+
+    if ($("usersAdminCount")) {
+      $("usersAdminCount").textContent = admins;
+    }
+
+    if ($("usersAuthorCount")) {
+      $("usersAuthorCount").textContent = authors;
+    }
+  }
+
+  function getFilteredUsers() {
+    const search = ($("usersSearch")?.value || "")
+      .toLowerCase()
+      .trim();
+
     const role = $("usersRoleFilter")?.value || "";
+    const status = $("usersStatusFilter")?.value || "";
 
-    const filtered = users.filter((user) => {
+    return users.filter(user => {
       const searchable = [
         user.full_name,
         user.username,
         user.email
       ].join(" ").toLowerCase();
 
-      return searchable.includes(search) && (!role || user.role === role);
+      return searchable.includes(search) &&
+        (!role || user.role === role) &&
+        (!status || String(isActive(user)) === status);
     });
+  }
 
-    if (!filtered.length) {
-      rows.innerHTML =
-        '<tr><td colspan="6">Tidak ada pengguna yang sesuai.</td></tr>';
-    } else {
-      rows.innerHTML = filtered.map((user) => {
-        const active = user.is_active === true;
+  function renderUsers() {
+    const container = $("usersListContainer");
+    if (!container) return;
 
-        return `
-          <tr>
-            <td>${escapeHtml(user.full_name || "-")}</td>
-            <td>${escapeHtml(user.username || "-")}</td>
-            <td>${escapeHtml(user.email || "-")}</td>
-            <td>${escapeHtml(roleLabel(user.role))}</td>
-            <td>${active ? "Aktif" : "Nonaktif"}</td>
-            <td>
-              <button type="button" class="outline-btn"
-                data-edit-user="${escapeHtml(user.id)}">Edit</button>
-              <button type="button" class="outline-btn"
-                data-toggle-user="${escapeHtml(user.id)}"
-                data-active="${active}">
-                ${active ? "Nonaktifkan" : "Aktifkan"}
-              </button>
-            </td>
-          </tr>`;
-      }).join("");
+    const filtered = getFilteredUsers();
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <strong>Tidak ada pengguna yang ditemukan</strong>
+          Coba ubah kata kunci pencarian atau filter yang digunakan.
+        </div>
+      `;
+      return;
     }
 
-    if ($("usersCount")) {
-      $("usersCount").textContent =
-        `${filtered.length} pengguna ditampilkan dari ${users.length} akun.`;
-    }
+    container.innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nama Lengkap</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Peran</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map(user => {
+              const active = isActive(user);
+              const id = escapeHtml(user.id);
+
+              return `
+                <tr>
+                  <td>${escapeHtml(user.full_name || "-")}</td>
+                  <td>${escapeHtml(user.username || "-")}</td>
+                  <td>${escapeHtml(user.email || "-")}</td>
+                  <td>${escapeHtml(roleLabel(user.role))}</td>
+                  <td>
+                    <span class="pill ${active ? "published" : "draft"}">
+                      ${active ? "Aktif" : "Nonaktif"}
+                    </span>
+                  </td>
+                  <td>
+  <div class="actions">
+    <button type="button" class="outline-btn"
+      data-edit-user="${id}">Edit</button>
+    <button type="button" class="outline-btn"
+      data-toggle-user="${id}">
+      ${active ? "Nonaktifkan" : "Aktifkan"}
+    </button>
+  </div>
+</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        Menampilkan ${filtered.length} dari ${users.length} pengguna.
+      </div>
+    `;
   }
 
   async function loadUsers() {
-    const rows = $("usersRows");
-    if (rows) {
-      rows.innerHTML =
-        '<tr><td colspan="6">Memuat data pengguna...</td></tr>';
+  console.log("LOAD USERS DIPANGGIL");
+
+  const container = $("usersListContainer");
+  console.log("CONTAINER:", container);
+
+    if (container) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <strong>Memuat data pengguna...</strong>
+          Mohon tunggu.
+        </div>
+      `;
     }
 
     try {
       const result = await apiRequest("/admin/users");
-      users = Array.isArray(result.data)
+
+      const list = Array.isArray(result.data)
         ? result.data
         : Array.isArray(result.users)
           ? result.users
-          : [];
+          : null;
 
+      if (!list) {
+        throw new Error(
+          "Format respons daftar pengguna tidak sesuai. Periksa respons GET /api/admin/users."
+        );
+      }
+
+      users = list;
+      updateStatistics();
       renderUsers();
+
+      const notice = $("usersNotice");
+      if (notice) {
+        notice.textContent = "";
+        notice.style.display = "none";
+        notice.classList.remove("is-error");
+      }
     } catch (error) {
       console.error("Gagal memuat pengguna:", error);
-      if (rows) {
-        rows.innerHTML =
-          '<tr><td colspan="6">Data gagal dimuat.</td></tr>';
+
+      if (container) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <strong>Data pengguna gagal dimuat</strong>
+            Periksa pesan kesalahan di atas atau Console browser.
+          </div>
+        `;
       }
+
       showNotice(error.message, true);
     }
   }
 
-  async function addUser() {
-    const full_name = prompt("Masukkan nama lengkap pengguna:");
-    if (full_name === null) return;
+  function openForm(user = null) {
+    const form = $("userForm");
+    const panel = $("userFormPanel");
 
-    const username = prompt("Masukkan username:");
-    if (username === null) return;
+    if (!form || !panel) return;
 
-    const email = prompt("Masukkan email pengguna:");
-    if (email === null) return;
+    editingUserId = user?.id || null;
+    form.reset();
 
-    const password = prompt("Masukkan password awal pengguna:");
-    if (password === null) return;
+    $("userFormTitle").textContent = user
+      ? "Edit Pengguna"
+      : "Tambah Pengguna";
 
-    const role = prompt(
-      "Masukkan role: super_admin, admin, atau author",
-      "author"
+    $("userFullName").value = user?.full_name || "";
+    $("userUsername").value = user?.username || "";
+    $("userRole").value = user?.role || "author";
+    $("userActive").value = String(
+      user ? isActive(user) : true
     );
+    $("userAvatar").value = user?.avatar_url || "";
 
-    if (role === null) return;
+    panel.hidden = false;
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
-    if (!["super_admin", "admin", "author"].includes(role)) {
-      showNotice("Role tidak valid.", true);
-      return;
-    }
+  function closeForm() {
+    const panel = $("userFormPanel");
+    if (panel) panel.hidden = true;
 
-    if (!full_name.trim() || !username.trim() || !email.trim() || password.length < 8) {
-      showNotice("Lengkapi data. Password minimal 8 karakter.", true);
+    editingUserId = null;
+    $("userForm")?.reset();
+  }
+
+  async function saveUser(event) {
+    event.preventDefault();
+
+    const payload = {
+      full_name: $("userFullName").value.trim(),
+      username: $("userUsername").value.trim(),
+      role: $("userRole").value,
+      is_active: $("userActive").value === "true",
+      avatar_url: $("userAvatar").value.trim() || null
+    };
+
+    if (!payload.full_name || !payload.username) {
+      showNotice("Nama lengkap dan username wajib diisi.", true);
       return;
     }
 
     try {
-      await apiRequest("/admin/users", {
-        method: "POST",
-        body: JSON.stringify({
-          full_name: full_name.trim(),
-          username: username.trim(),
-          email: email.trim(),
-          password,
-          role
-        })
-      });
+      if (editingUserId) {
+        await apiRequest(
+          `/admin/users/${encodeURIComponent(editingUserId)}`,
+          {
+            method: "PUT",
+            body: JSON.stringify(payload)
+          }
+        );
 
-      showNotice("Pengguna berhasil ditambahkan.");
+        showNotice("Data pengguna berhasil diperbarui.");
+      } else {
+        const email = window.prompt(
+          "Masukkan email untuk akun pengguna baru:"
+        );
+
+        if (email === null) return;
+
+        if (!email.trim()) {
+          showNotice("Email wajib diisi.", true);
+          return;
+        }
+
+        const password = window.prompt(
+          "Buat kata sandi awal minimal 8 karakter:"
+        );
+
+        if (password === null) return;
+
+        if (password.length < 8) {
+          showNotice("Kata sandi minimal 8 karakter.", true);
+          return;
+        }
+
+        await apiRequest("/admin/users", {
+          method: "POST",
+          body: JSON.stringify({
+            ...payload,
+            email: email.trim(),
+            password
+          })
+        });
+
+        showNotice("Pengguna berhasil ditambahkan.");
+      }
+
+      closeForm();
       await loadUsers();
     } catch (error) {
+      console.error("Gagal menyimpan pengguna:", error);
       showNotice(error.message, true);
     }
   }
 
   async function editUser(id) {
-    const user = users.find((item) => String(item.id) === String(id));
+    const user = users.find(item => String(item.id) === String(id));
     if (!user) return;
 
-    const full_name = prompt("Nama lengkap:", user.full_name || "");
-    if (full_name === null) return;
-
-    const username = prompt("Username:", user.username || "");
-    if (username === null) return;
-
-    const role = prompt(
-      "Role: super_admin, admin, atau author",
-      user.role || "author"
-    );
-
-    if (role === null) return;
-
-    if (!["super_admin", "admin", "author"].includes(role)) {
-      showNotice("Role tidak valid.", true);
-      return;
-    }
-
-    try {
-      await apiRequest(`/admin/users/${encodeURIComponent(id)}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          full_name: full_name.trim(),
-          username: username.trim(),
-          role
-        })
-      });
-
-      showNotice("Data pengguna berhasil diperbarui.");
-      await loadUsers();
-    } catch (error) {
-      showNotice(error.message, true);
-    }
+    openForm(user);
   }
 
-  async function toggleUser(id, currentlyActive) {
-    const action = currentlyActive ? "menonaktifkan" : "mengaktifkan";
+  async function toggleUser(id) {
+    const user = users.find(item => String(item.id) === String(id));
+    if (!user) return;
 
-    if (!confirm(`Yakin ingin ${action} akun ini?`)) return;
+    const active = isActive(user);
+    const action = active ? "menonaktifkan" : "mengaktifkan";
+
+    if (!window.confirm(
+      `Yakin ingin ${action} akun ${user.full_name || user.username}?`
+    )) {
+      return;
+    }
 
     try {
       await apiRequest(
         `/admin/users/${encodeURIComponent(id)}/status`,
         {
           method: "PUT",
-          body: JSON.stringify({ is_active: !currentlyActive })
+          body: JSON.stringify({ is_active: !active })
         }
       );
 
-      showNotice("Status akun berhasil diperbarui.");
+      showNotice("Status pengguna berhasil diperbarui.");
       await loadUsers();
     } catch (error) {
+      console.error("Gagal mengubah status pengguna:", error);
       showNotice(error.message, true);
     }
   }
 
-  $("refreshUsersBtn")?.addEventListener("click", loadUsers);
-  $("addUserBtn")?.addEventListener("click", addUser);
+  $("refreshUsers")?.addEventListener("click", loadUsers);
+  $("addUserButton")?.addEventListener("click", () => openForm());
+  $("userForm")?.addEventListener("submit", saveUser);
+  $("cancelUserForm")?.addEventListener("click", closeForm);
+  $("cancelUserFormBottom")?.addEventListener("click", closeForm);
+
   $("usersSearch")?.addEventListener("input", renderUsers);
   $("usersRoleFilter")?.addEventListener("change", renderUsers);
+  $("usersStatusFilter")?.addEventListener("change", renderUsers);
 
-  $("usersRows")?.addEventListener("click", (event) => {
+  $("usersListContainer")?.addEventListener("click", event => {
     const editButton = event.target.closest("[data-edit-user]");
     const toggleButton = event.target.closest("[data-toggle-user]");
 
     if (editButton) {
       editUser(editButton.dataset.editUser);
     } else if (toggleButton) {
-      toggleUser(
-        toggleButton.dataset.toggleUser,
-        toggleButton.dataset.active === "true"
-      );
+      toggleUser(toggleButton.dataset.toggleUser);
     }
   });
 
+  // Dipanggil ketika halaman Pengguna dibuka.
   window.addEventListener("users-page-open", loadUsers);
+
+  // Jika halaman Pengguna adalah halaman aktif saat skrip dijalankan.
+  if ($("usersPage")?.classList.contains("active")) {
+    loadUsers();
+  }
 })();

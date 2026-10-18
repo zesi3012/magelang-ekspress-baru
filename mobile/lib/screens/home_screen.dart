@@ -1,17 +1,14 @@
-import '../services/article_service.dart';
+
 import 'package:flutter/material.dart';
-import '../data/sample_data.dart';
-import '../models/epaper_issue.dart';
+import '../services/epaper_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
     super.key,
     required this.onOpenIssue,
-    required this.onOpenArticle,
   });
 
-  final VoidCallback onOpenIssue;
-  final ValueChanged<Map<String, String>> onOpenArticle;
+  final ValueChanged<Map<String, dynamic>> onOpenIssue;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +17,6 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: CustomScrollView(
         slivers: [
-          // Header aplikasi
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
             sliver: SliverToBoxAdapter(
@@ -124,7 +120,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     FilledButton.tonal(
-                      onPressed: onOpenIssue,
+                      onPressed: () => _openLatest(context),
                       child: const Text('Buka e-paper'),
                     ),
                   ],
@@ -133,7 +129,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
 
-          // Judul e-paper terbaru
+          // Daftar edisi
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverToBoxAdapter(
@@ -148,7 +144,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   TextButton(
-                    onPressed: onOpenIssue,
+                    onPressed: () => _openLatest(context),
                     child: const Text('Lihat semua'),
                   ),
                 ],
@@ -156,79 +152,42 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
 
-          // Kartu e-paper
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 4, 20, 18),
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
             sliver: SliverToBoxAdapter(
-              child: _IssueCard(
-                issue: sampleIssues.first,
-                onTap: onOpenIssue,
-              ),
-            ),
-          ),
-
-          // Judul artikel pilihan
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverToBoxAdapter(
-              child: Text(
-                'Artikel pilihan',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-          ),
-
-          // Artikel dari API PHP dan Supabase
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
-            sliver: SliverToBoxAdapter(
-              child: FutureBuilder<List<Map<String, String>>>(
-                future: ArticleService.fetchArticles(),
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: EpaperService.fetchPublished(),
                 builder: (context, snapshot) {
-                  // Indikator loading
-                  if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Padding(
-                      padding: EdgeInsets.all(32),
+                      padding: EdgeInsets.all(30),
                       child: Center(
                         child: CircularProgressIndicator(),
                       ),
                     );
                   }
 
-                  // Pesan jika permintaan gagal
                   if (snapshot.hasError) {
                     return Card(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(18),
                         child: Column(
                           children: [
-                            const Icon(
-                              Icons.cloud_off,
-                              size: 36,
-                            ),
+                            const Icon(Icons.cloud_off, size: 36),
                             const SizedBox(height: 8),
-                            Text(
-                              'Artikel belum dapat dimuat.',
-                              style: theme.textTheme.titleMedium,
-                              textAlign: TextAlign.center,
-                            ),
+                            const Text('E-paper belum dapat dimuat.'),
                             const SizedBox(height: 6),
                             Text(
-                              'Periksa koneksi internet dan server API.',
-                              style: theme.textTheme.bodySmall,
+                              snapshot.error.toString(),
                               textAlign: TextAlign.center,
+                              style: theme.textTheme.bodySmall,
                             ),
-                            const SizedBox(height: 12),
-                            OutlinedButton.icon(
+                            TextButton.icon(
                               onPressed: () {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute<void>(
-                                    builder: (_) => HomeScreen(
-                                      onOpenIssue: onOpenIssue,
-                                      onOpenArticle: onOpenArticle,
+                                    builder: (_) => const HomeScreen(
+                                      onOpenIssue: _unusedOpenIssue,
                                     ),
                                   ),
                                 );
@@ -242,75 +201,66 @@ class HomeScreen extends StatelessWidget {
                     );
                   }
 
-                  final articles = snapshot.data ?? [];
+                  final publications = snapshot.data ?? [];
 
-                  // Pesan jika belum ada artikel
-                  if (articles.isEmpty) {
-                    return const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Center(
-                        child: Text('Belum ada artikel terbit.'),
+                  if (publications.isEmpty) {
+                    return const Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(22),
+                        child: Center(
+                          child: Text(
+                            'Belum ada e-paper yang diterbitkan.',
+                          ),
+                        ),
                       ),
                     );
                   }
 
-                  // Daftar artikel
+                  final grouped =
+                      <String, List<Map<String, dynamic>>>{};
+
+                  for (final publication in publications) {
+                    final category =
+                        publication['category_name']?.toString() ??
+                            'Kategori lainnya';
+
+                    grouped.putIfAbsent(category, () => []).add(publication);
+                  }
+
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (final article in articles) ...[
-                        Card(
-                          clipBehavior: Clip.antiAlias,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(18),
-                            onTap: () => onOpenArticle(article),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${article['category'] ?? 'Berita'}'
-                                    ' • '
-                                    '${article['date'] ?? ''}',
-                                    style: theme.textTheme.labelMedium
-                                        ?.copyWith(
-                                      color: theme.colorScheme.primary,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                      for (final entry in grouped.entries) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 12,
+                            bottom: 12,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  entry.key,
+                                  style:
+                                      theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w800,
                                   ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    article['title'] ?? 'Tanpa judul',
-                                    style: theme.textTheme.titleMedium
-                                        ?.copyWith(
-                                      fontWeight: FontWeight.w800,
-                                      height: 1.35,
-                                    ),
-                                  ),
-                                  if ((article['excerpt'] ?? '')
-                                      .isNotEmpty) ...[
-                                    const SizedBox(height: 7),
-                                    Text(
-                                      article['excerpt']??'',
-                                      style: theme.textTheme.bodyMedium
-                                          ?.copyWith(height: 1.65),
-                                    ),
-                                  ],
-                                  const SizedBox(height: 8),
-                                  const Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Icon(
-                                      Icons.arrow_forward,
-                                      size: 18,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
+                              Text(
+                                '${entry.value.length} edisi',
+                                style: theme.textTheme.bodySmall,
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        for (final publication in entry.value) ...[
+                          _PublishedEpaperCard(
+                            publication: publication,
+                            onTap: () => onOpenIssue(publication),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
                       ],
                     ],
                   );
@@ -322,115 +272,157 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _openLatest(BuildContext context) async {
+    try {
+      final publications = await EpaperService.fetchPublished();
+
+      if (!context.mounted) return;
+
+      if (publications.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Belum ada e-paper yang diterbitkan.'),
+          ),
+        );
+        return;
+      }
+
+      onOpenIssue(publications.first);
+    } catch (error) {
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal memuat e-paper: $error')),
+      );
+    }
+  }
 }
 
-// Kartu e-paper tetap menggunakan data yang sudah ada.
-class _IssueCard extends StatelessWidget {
-  const _IssueCard({
-    required this.issue,
+void _unusedOpenIssue(Map<String, dynamic> publication) {}
+
+class _PublishedEpaperCard extends StatelessWidget {
+  const _PublishedEpaperCard({
+    required this.publication,
     required this.onTap,
   });
 
-  final EpaperIssue issue;
+  final Map<String, dynamic> publication;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final title = publication['title']?.toString() ?? 'Tanpa judul';
+    final coverUrl = publication['cover_url']?.toString() ?? '';
+    final date = publication['publication_date']?.toString() ?? '';
+    final premium = publication['is_premium'] == true;
 
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        child: Row(
-          children: [
-            Container(
-              width: 118,
-              height: 158,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF102A43),
-                    Color(0xFF3475A2),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: SizedBox(
+                  width: 100,
+                  height: 132,
+                  child: coverUrl.startsWith('https://') ||
+                          coverUrl.startsWith('http://')
+                      ? Image.network(
+                          coverUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => _coverPlaceholder(),
+                        )
+                      : _coverPlaceholder(),
                 ),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.newspaper,
-                      color: Colors.white,
-                      size: 25,
-                    ),
-                    Spacer(),
-                    Text(
-                      'MAGELANG\nEKSPRESS',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        height: 1.1,
+              const SizedBox(width: 14),
+              Expanded(
+                child: SizedBox(
+                  height: 132,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        publication['category_name']?.toString() ??
+                            'Kategori lainnya',
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                      'EDISI DIGITAL',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 8,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      issue.editionLabel.toUpperCase(),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        letterSpacing: .8,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 7),
-                    Text(
-                      issue.title,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      issue.dateLabel,
-                      style: theme.textTheme.bodySmall,
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        Text(
-                          issue.priceLabel,
+                      const SizedBox(height: 7),
+                      Expanded(
+                        child: Text(
+                          title,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w800,
+                            height: 1.3,
                           ),
                         ),
-                        const Spacer(),
-                        const Icon(Icons.chevron_right),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Text(
+                        date.isEmpty ? 'Tanggal belum tersedia' : date,
+                        style: theme.textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: 7),
+                      Row(
+                        children: [
+                          Icon(
+                            premium
+                                ? Icons.lock_outline
+                                : Icons.menu_book_outlined,
+                            size: 15,
+                            color: theme.colorScheme.primary,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            premium ? 'Premium' : 'Gratis',
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const Spacer(),
+                          const Icon(Icons.chevron_right, size: 20),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _coverPlaceholder() {
+    return Container(
+      color: const Color(0xFF102A43),
+      alignment: Alignment.center,
+      child: const Padding(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.newspaper, color: Colors.white, size: 34),
+            SizedBox(height: 8),
+            Text(
+              'MAGELANG\nEKSPRESS',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
               ),
             ),
           ],
