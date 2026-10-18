@@ -1,10 +1,12 @@
-
+```html
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#102a43">
+
   <title>Dashboard Admin | Magelang Ekspress</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,863 +16,1602 @@
   <style>
     :root {
       --navy: #102a43;
-      --navy-light: #243f5a;
-      --blue: #2563eb;
-      --bg: #f3f6fa;
+      --navy-dark: #0b1f33;
+      --blue: #1769aa;
+      --blue-light: #eaf3fb;
+      --background: #f4f7fb;
       --white: #ffffff;
-      --text: #243447;
-      --muted: #718096;
-      --border: #e2e8f0;
-      --green: #16805d;
-      --red: #c53030;
-      --shadow: 0 4px 18px rgba(16, 42, 67, .05);
+      --text: #243b53;
+      --muted: #8293a5;
+      --border: #e4eaf1;
+      --green: #18865b;
+      --red: #c0392b;
+      --orange: #b7791f;
+      --sidebar-width: 250px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
-      margin: 0;
-      font-family: Inter, Arial, sans-serif;
-      background: var(--bg);
+      min-height: 100vh;
+      font-family: "Inter", sans-serif;
       color: var(--text);
-      font-size: 14px;
+      background: var(--background);
     }
 
-    button, input, select, textarea { font: inherit; }
-    button { cursor: pointer; }
-    a { color: inherit; text-decoration: none; }
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
 
-    .app { min-height: 100vh; }
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      min-height: 100vh;
+    }
 
     .sidebar {
       position: fixed;
       inset: 0 auto 0 0;
-      width: 250px;
-      padding: 24px 16px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      width: var(--sidebar-width);
+      padding: 25px 16px;
+      color: #fff;
       background: var(--navy);
-      color: white;
-      z-index: 20;
       overflow-y: auto;
-      transition: transform .2s ease;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 4px 10px 28px;
-      border-bottom: 1px solid rgba(255,255,255,.13);
+      padding: 0 10px 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
     }
 
     .brand-logo {
       display: grid;
       place-items: center;
-      width: 43px;
-      height: 43px;
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
-      background: white;
       color: var(--navy);
+      background: #fff;
+      font-size: 20px;
       font-weight: 800;
-      font-size: 17px;
     }
 
-    .brand h2 { font-size: 15px; margin: 0 0 5px; color: white; }
-    .brand p { font-size: 11px; margin: 0; color: #c5d2df; }
+    .brand-name {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -.3px;
+    }
+
+    .brand-caption {
+      margin-top: 5px;
+      color: #b8c9d9;
+      font-size: 10px;
+      letter-spacing: 1.3px;
+    }
 
     .nav-label {
-      margin: 26px 10px 10px;
+      padding: 26px 12px 12px;
+      color: #a9bfd2;
       font-size: 10px;
-      letter-spacing: 1.4px;
-      color: #9fb3c8;
       font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-menu {
+      display: grid;
+      gap: 7px;
     }
 
     .nav-link {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px;
-      margin: 5px 0;
+      width: 100%;
+      min-height: 46px;
+      padding: 12px 14px;
+      border: 0;
       border-radius: 9px;
-      color: #d9e2ec;
+      color: #d6e2ee;
+      background: transparent;
+      font-size: 13px;
       font-weight: 500;
-      transition: background .2s;
+      transition: background .2s, color .2s;
     }
 
-    .nav-link:hover, .nav-link.active {
-      background: rgba(255,255,255,.13);
-      color: white;
+    .nav-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .09);
     }
 
-    .nav-icon { width: 22px; text-align: center; font-size: 17px; }
+    .nav-link.is-active {
+      color: var(--navy);
+      background: #fff;
+      font-weight: 700;
+    }
+
+    .nav-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      font-size: 18px;
+    }
 
     .sidebar-bottom {
-      margin: 35px 8px 0;
-      padding-top: 18px;
-      border-top: 1px solid rgba(255,255,255,.13);
-      color: #c5d2df;
+      margin-top: auto;
+      padding: 18px 10px 0;
+      border-top: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .sidebar-bottom p {
+      color: #c0d0de;
       font-size: 11px;
       line-height: 1.8;
     }
 
-    .main { margin-left: 250px; min-height: 100vh; }
+    .main {
+      min-height: 100vh;
+      margin-left: var(--sidebar-width);
+    }
 
     .topbar {
-      height: 72px;
-      background: white;
-      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 30px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      min-height: 76px;
+      padding: 15px 32px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, .96);
+      backdrop-filter: blur(10px);
     }
 
-    .breadcrumb { color: var(--muted); font-size: 12px; }
-    .breadcrumb span { margin: 0 9px; color: #a0aec0; }
-    .breadcrumb strong { color: var(--text); font-weight: 600; }
-
-    .topbar-right { display: flex; align-items: center; gap: 12px; }
-    .admin-chip {
+    .topbar-left {
       display: flex;
       align-items: center;
-      gap: 9px;
-      font-weight: 600;
-      font-size: 12px;
-    }
-
-    .avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: #dbeafe;
-      color: #1d4ed8;
-      display: grid;
-      place-items: center;
-      font-weight: 800;
+      gap: 12px;
     }
 
     .menu-toggle {
       display: none;
-      border: 0;
-      background: transparent;
-      font-size: 22px;
-      color: var(--navy);
-    }
-
-    .content { padding: 30px; max-width: 1600px; margin: auto; }
-    .page { display: none; }
-    .page.is-active { display: block; }
-
-    .page-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-
-    .eyebrow {
-      color: var(--blue);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 1.4px;
-      margin: 0 0 10px;
-    }
-
-    h1 { font-size: 25px; letter-spacing: -.7px; margin: 0 0 9px; color: var(--navy); }
-    h2 { font-size: 15px; margin: 0; color: var(--navy); }
-    h3 { font-size: 13px; margin: 0 0 8px; color: var(--navy); }
-    .muted { color: var(--muted); font-size: 12px; line-height: 1.7; margin: 0; }
-
-    .primary-btn, .outline-btn, .danger-btn {
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      border: 1px solid transparent;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-    }
-
-    .primary-btn { background: var(--navy); color: white; }
-    .primary-btn:hover { background: var(--navy-light); }
-    .outline-btn { background: white; border-color: var(--border); color: var(--text); }
-    .outline-btn:hover { background: #f8fafc; }
-    .danger-btn { background: #fff5f5; border-color: #fed7d7; color: var(--red); }
-    button:disabled { opacity: .5; cursor: not-allowed; }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin-bottom: 22px;
-    }
-
-    .stat-card, .panel, .category-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      box-shadow: var(--shadow);
-    }
-
-    .stat-card { padding: 22px; }
-    .stat-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; }
-
-    .stat-icon {
       width: 38px;
       height: 38px;
-      display: grid;
-      place-items: center;
-      background: #edf4ff;
-      color: var(--blue);
-      border-radius: 10px;
-      font-size: 17px;
-    }
-
-    .stat-number { margin-top: 17px; font-size: 29px; font-weight: 800; color: var(--navy); }
-    .stat-description { margin-top: 6px; font-size: 11px; color: var(--muted); }
-
-    .panel { padding: 22px; margin-bottom: 20px; }
-
-    .panel-heading, .card-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-    }
-
-    .notice {
-      padding: 12px 14px;
-      border: 1px solid #bfdbfe;
-      background: #eff6ff;
-      color: #1e40af;
-      border-radius: 8px;
-      font-size: 12px;
-      line-height: 1.7;
-      margin-bottom: 18px;
-      overflow-wrap: anywhere;
-    }
-
-    .notice p { margin: 4px 0 0; }
-    .notice.success { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
-    .notice.error { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
-    .notice:empty { display: none; }
-
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .quick-card {
-      display: block;
-      text-align: left;
       border: 1px solid var(--border);
-      border-radius: 11px;
-      background: white;
-      padding: 20px;
-      transition: border-color .2s, transform .2s;
-    }
-
-    .quick-card:hover { border-color: #93c5fd; transform: translateY(-2px); }
-    .quick-card .quick-icon { font-size: 22px; margin-bottom: 15px; }
-    .quick-card h3 { margin-bottom: 8px; }
-    .quick-card .quick-link {
-      display: inline-block;
-      margin-top: 16px;
-      color: var(--blue);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .table-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .field {
-      width: 100%;
-      min-width: 0;
-      border: 1px solid #d8e1eb;
       border-radius: 8px;
-      background: white;
-      color: var(--text);
-      padding: 10px 12px;
-      outline: none;
-      font-size: 12px;
+      background: #fff;
+      font-size: 19px;
     }
 
-    .field:focus { border-color: #60a5fa; box-shadow: 0 0 0 3px #dbeafe; }
-    .search-field { flex: 1; min-width: 180px; }
-    .filter-field { width: auto; min-width: 145px; }
-
-    .table-wrap { overflow-x: auto; width: 100%; }
-    table { border-collapse: collapse; width: 100%; min-width: 700px; }
-
-    th {
-      text-align: left;
-      background: #f8fafc;
-      color: #64748b;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: .5px;
-      font-weight: 700;
-      padding: 13px 14px;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
+    .topbar h1 {
+      color: var(--navy);
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -.5px;
     }
 
-    td {
-      padding: 15px 14px;
-      border-bottom: 1px solid #edf2f7;
-      font-size: 12px;
-      vertical-align: middle;
-    }
-
-    tbody tr:hover { background: #fbfdff; }
-    tbody tr:last-child td { border-bottom: 0; }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 30px;
-      padding: 5px 9px;
-      font-size: 10px;
-      font-weight: 700;
-      background: #edf2f7;
-      color: #475569;
-      white-space: nowrap;
-    }
-
-    .badge.published, .badge.active { background: #dcfce7; color: #166534; }
-    .badge.draft { background: #fef3c7; color: #92400e; }
-    .badge.premium { background: #ede9fe; color: #5b21b6; }
-
-    .issue-cell { display: flex; align-items: center; gap: 12px; min-width: 190px; }
-    .cover { width: 42px; height: 54px; object-fit: cover; border-radius: 4px; }
-    .cover-placeholder {
-      width: 42px;
-      height: 54px;
-      border-radius: 4px;
-      display: grid;
-      place-items: center;
-      background: #edf2f7;
-      color: #64748b;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    .issue-title { font-weight: 700; color: var(--navy); margin-bottom: 5px; }
-    .issue-sub { font-size: 10px; color: var(--muted); }
-
-    .table-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      border-top: 1px solid var(--border);
-      padding-top: 16px;
-      margin-top: 8px;
+    .topbar-subtitle {
+      margin-top: 5px;
       color: var(--muted);
       font-size: 11px;
     }
 
-    .category-page-heading { margin-bottom: 24px; }
-    .category-card { padding: 22px; margin-bottom: 20px; }
-
-    .category-stats {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .category-stat {
+    .admin-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-      background: white;
+      border-radius: 30px;
+      background: #fff;
     }
 
-    .category-stat strong {
-      display: block;
-      margin-top: 10px;
-      font-size: 25px;
+    .admin-avatar {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--navy);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .admin-name {
       color: var(--navy);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .admin-role {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .content {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 30px 32px 45px;
+    }
+
+    /* Navigasi halaman */
+    .page {
+      display: none;
+      animation: pageFade .18s ease;
+    }
+
+    .page.is-active {
+      display: block;
+    }
+
+    @keyframes pageFade {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .page-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .page-heading h2 {
+      color: var(--navy);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.6px;
+    }
+
+    .page-heading p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .eyebrow {
+      margin-bottom: 8px;
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 10px 15px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: var(--navy);
+    }
+
+    .btn-primary:hover {
+      background: var(--blue);
+    }
+
+    .btn-secondary {
+      color: var(--navy);
+      border-color: var(--border);
+      background: #fff;
+    }
+
+    .btn-secondary:hover {
+      background: #f0f5fa;
+    }
+
+    .btn-danger {
+      color: var(--red);
+      border-color: #f0d3d0;
+      background: #fff;
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 17px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      padding: 21px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #fff;
+      box-shadow: 0 3px 12px rgba(16, 42, 67, .025);
+    }
+
+    .stat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .stat-label {
+      color: #627d98;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .stat-icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      color: var(--blue);
+      background: var(--blue-light);
+      font-size: 19px;
+    }
+
+    .stat-value {
+      margin-top: 18px;
+      color: var(--navy);
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .stat-note {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .panel {
+      margin-bottom: 22px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #fff;
+      box-shadow: 0 3px 12px rgba(16, 42, 67, .025);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 19px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-header h3 {
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .panel-header p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .panel-body {
+      padding: 22px;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .quick-card {
+      display: block;
+      width: 100%;
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      text-align: left;
+      background: #fff;
+      transition: .2s;
+    }
+
+    .quick-card:hover {
+      border-color: #a8c9e8;
+      background: #f8fbff;
+      transform: translateY(-2px);
+    }
+
+    .quick-card-icon {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      margin-bottom: 14px;
+      border-radius: 10px;
+      color: var(--blue);
+      background: var(--blue-light);
+      font-size: 20px;
+    }
+
+    .quick-card h4 {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .quick-card p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 17px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .field,
+    .search-field,
+    .select-field,
+    .textarea-field {
+      width: 100%;
+      min-height: 41px;
+      padding: 10px 12px;
+      border: 1px solid #dbe4ed;
+      border-radius: 8px;
+      outline: none;
+      color: var(--text);
+      background: #fff;
+      font-size: 12px;
+    }
+
+    .field:focus,
+    .search-field:focus,
+    .select-field:focus,
+    .textarea-field:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(23, 105, 170, .1);
+    }
+
+    .search-field {
+      width: 260px;
+    }
+
+    .select-field {
+      width: auto;
+      min-width: 145px;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      padding: 14px 19px;
+      color: #627d98;
+      background: #f8fafc;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 15px 19px;
+      border-top: 1px solid #edf1f5;
+      color: #486581;
+      font-size: 12px;
+    }
+
+    tbody tr:hover {
+      background: #fbfdff;
+    }
+
+    .table-title {
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    .table-subtitle {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .status::before {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      content: "";
+    }
+
+    .status-active,
+    .status-published {
+      color: var(--green);
+      background: #e9f7ef;
+    }
+
+    .status-inactive,
+    .status-draft {
+      color: #718096;
+      background: #edf2f7;
+    }
+
+    .status-pending {
+      color: var(--orange);
+      background: #fff6df;
+    }
+
+    .role-badge {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 6px;
+      color: #365b7c;
+      background: #edf5fc;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .table-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .icon-btn {
+      display: inline-grid;
+      place-items: center;
+      min-width: 32px;
+      min-height: 32px;
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--navy);
+      background: #fff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .icon-btn:hover {
+      background: #f0f5fa;
+    }
+
+    .empty-state {
+      padding: 38px 20px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .empty-state strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--navy);
+      font-size: 13px;
+    }
+
+    .notice {
+      display: none;
+      margin-bottom: 18px;
+      padding: 12px 14px;
+      border: 1px solid #cde9d8;
+      border-radius: 8px;
+      color: #176b45;
+      background: #effaf3;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .notice.is-visible {
+      display: block;
+    }
+
+    .notice.error {
+      border-color: #f1cfcc;
+      color: #a52b21;
+      background: #fff4f3;
     }
 
     .form-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: 17px;
     }
 
-    .form-group { display: flex; flex-direction: column; gap: 7px; }
-    .form-group label { font-size: 11px; font-weight: 700; color: #475569; }
-    .form-group.full { grid-column: 1 / -1; }
-    textarea.field { resize: vertical; min-height: 90px; }
-    .form-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
-    .hidden { display: none !important; }
-
-    footer { color: #94a3b8; font-size: 11px; text-align: center; padding: 24px 0 8px; }
-
-    @media (max-width: 1000px) {
-      .sidebar { width: 225px; }
-      .main { margin-left: 225px; }
-      .content { padding: 22px; }
-      .stats-grid, .quick-grid { gap: 12px; }
-      .stat-card { padding: 17px; }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); width: 250px; }
-      .sidebar.open { transform: translateX(0); box-shadow: 10px 0 35px rgba(0,0,0,.15); }
-      .main { margin-left: 0; }
-      .topbar { height: 62px; padding: 0 16px; }
-      .menu-toggle { display: inline-block; }
-      .topbar-left { display: flex; align-items: center; gap: 12px; }
-      .breadcrumb { font-size: 11px; }
-      .admin-name { display: none; }
-      .content { padding: 20px 14px; }
-      h1 { font-size: 22px; }
-      .stats-grid, .quick-grid { grid-template-columns: 1fr; }
-      .category-stats { grid-template-columns: 1fr 1fr; }
-      .panel, .category-card { padding: 16px; }
-      .form-grid { grid-template-columns: 1fr; }
-      .form-group.full { grid-column: auto; }
+    .form-group.full {
+      grid-column: 1 / -1;
     }
 
-    @media (max-width: 400px) {
-      .category-stats { grid-template-columns: 1fr; }
-      .breadcrumb span { margin: 0 4px; }
+    .form-group label {
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .form-help {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .textarea-field {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .footer {
+      padding: 12px 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: 10px;
+    }
+
+    @media (max-width: 1100px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .quick-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .content {
+        padding: 25px 22px 35px;
+      }
+
+      .topbar {
+        padding: 14px 22px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      :root {
+        --sidebar-width: 250px;
+      }
+
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+        box-shadow: 8px 0 30px rgba(0, 0, 0, .12);
+      }
+
+      .sidebar.is-open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .menu-toggle {
+        display: inline-grid;
+        place-items: center;
+      }
+
+      .topbar {
+        min-height: 68px;
+        padding: 12px 15px;
+      }
+
+      .topbar h1 {
+        font-size: 15px;
+      }
+
+      .topbar-subtitle {
+        font-size: 10px;
+      }
+
+      .admin-chip {
+        padding: 5px;
+        border: 0;
+      }
+
+      .admin-chip-text {
+        display: none;
+      }
+
+      .content {
+        padding: 22px 15px 30px;
+      }
+
+      .page-heading {
+        flex-direction: column;
+      }
+
+      .page-heading h2 {
+        font-size: 20px;
+      }
+
+      .stats-grid {
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 15px;
+      }
+
+      .stat-label {
+        font-size: 10px;
+      }
+
+      .stat-value {
+        font-size: 25px;
+      }
+
+      .stat-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+      }
+
+      .quick-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-header,
+      .panel-body {
+        padding: 16px;
+      }
+
+      .toolbar {
+        align-items: stretch;
+        padding: 14px;
+      }
+
+      .toolbar-left,
+      .toolbar-right {
+        width: 100%;
+      }
+
+      .search-field,
+      .select-field {
+        width: 100%;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 
 <body>
-<div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="brand-logo">ME</div>
-      <div>
-        <h2>Magelang Ekspress</h2>
-        <p>Admin E-Paper</p>
-      </div>
-    </div>
-
-    <div class="nav-label">MENU UTAMA</div>
-    <nav aria-label="Navigasi utama">
-      <a class="nav-link active" href="#dashboard">
-        <span class="nav-icon">▦</span> Dashboard
-      </a>
-      <a class="nav-link" href="#epaper">
-        <span class="nav-icon">▤</span> Manajemen E-Paper
-      </a>
-      <a class="nav-link" href="#categories">
-        <span class="nav-icon">▧</span> Kategori
-      </a>
-      <a class="nav-link" href="#users">
-        <span class="nav-icon">♙</span> Pengguna
-      </a>
-    </nav>
-
-    <div class="sidebar-bottom">
-      <strong>MAGELANG EKSPRESS</strong><br>
-      Sistem pengelolaan koran digital.<br>
-      <span id="sidebarYear"></span>
-    </div>
-  </aside>
-
-  <main class="main">
-    <header class="topbar">
-      <div class="topbar-left">
-        <button type="button" class="menu-toggle" id="menuToggle" aria-label="Buka menu">☰</button>
-        <div class="breadcrumb" id="breadcrumb">
-          Magelang Ekspress <span>/</span> <strong>Dashboard</strong>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#dashboard" aria-label="Magelang Ekspress Dashboard">
+        <div class="brand-logo">ME</div>
+        <div>
+          <div class="brand-name">Magelang Ekspress</div>
+          <div class="brand-caption">PANEL ADMINISTRATOR</div>
         </div>
-      </div>
+      </a>
 
-      <div class="topbar-right">
+      <div class="nav-label">Menu Utama</div>
+
+      <nav class="nav-menu" aria-label="Navigasi utama">
+        <a class="nav-link is-active" href="#dashboard" data-page="dashboard">
+          <span class="nav-icon">⌂</span>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="nav-link" href="#epaper" data-page="epaper">
+          <span class="nav-icon">▤</span>
+          <span>Manajemen E-Paper</span>
+        </a>
+
+        <a class="nav-link" href="#categories" data-page="categories">
+          <span class="nav-icon">▦</span>
+          <span>Kategori</span>
+        </a>
+
+        <a class="nav-link" href="#users" data-page="users">
+          <span class="nav-icon">♙</span>
+          <span>Pengguna</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <p><strong>Magelang Ekspress</strong></p>
+        <p>Panel pengelolaan koran digital</p>
+        <p style="margin-top:8px;">© 2026 Magelang Ekspress</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle" type="button" aria-label="Buka menu">☰</button>
+          <div>
+            <h1 id="topbarTitle">Dashboard</h1>
+            <p class="topbar-subtitle" id="topbarSubtitle">Ringkasan pengelolaan Magelang Ekspress</p>
+          </div>
+        </div>
+
         <div class="admin-chip">
-          <div class="avatar">A</div>
-          <span class="admin-name" id="adminName">Administrator</span>
+          <div class="admin-avatar" id="adminAvatar">A</div>
+          <div class="admin-chip-text">
+            <div class="admin-name" id="adminName">Administrator</div>
+            <div class="admin-role" id="adminRole">Admin</div>
+          </div>
         </div>
+      </header>
+
+      <div class="content">
+        <div class="notice" id="globalNotice" role="status" aria-live="polite"></div>
+
+        <!-- HALAMAN DASHBOARD -->
+        <section class="page is-active" id="dashboard" data-title="Dashboard"
+          data-subtitle="Ringkasan pengelolaan Magelang Ekspress">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">Ringkasan Sistem</div>
+              <h2>Selamat Datang di Dashboard</h2>
+              <p>Pantau pengelolaan e-paper, artikel, kategori, dan akun pengguna Magelang Ekspress.</p>
+            </div>
+            <button class="btn btn-primary" id="refreshDashboard" type="button">↻ Perbarui Data</button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">Total E-Paper</span>
+                <span class="stat-icon">▤</span>
+              </div>
+              <div class="stat-value" id="totalEpaper">—</div>
+              <div class="stat-note">Jumlah edisi yang tercatat</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">Total Artikel</span>
+                <span class="stat-icon">▧</span>
+              </div>
+              <div class="stat-value" id="totalArticles">—</div>
+              <div class="stat-note">Artikel yang tercatat di sistem</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">Total Kategori</span>
+                <span class="stat-icon">▦</span>
+              </div>
+              <div class="stat-value" id="totalCategories">—</div>
+              <div class="stat-note">Kategori publikasi</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">Total Pengguna</span>
+                <span class="stat-icon">♙</span>
+              </div>
+              <div class="stat-value" id="totalUsers">—</div>
+              <div class="stat-note">Akun yang terdaftar</div>
+            </article>
+          </div>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Akses Cepat</h3>
+                <p>Pilih menu untuk melanjutkan pekerjaan administrasi.</p>
+              </div>
+            </div>
+
+            <div class="panel-body">
+              <div class="quick-grid">
+                <button class="quick-card" id="epaperQuickLink" type="button">
+                  <span class="quick-card-icon">▤</span>
+                  <h4>Manajemen E-Paper</h4>
+                  <p>Kelola edisi koran digital dan data publikasi.</p>
+                </button>
+
+                <button class="quick-card" id="categoriesQuickLink" type="button">
+                  <span class="quick-card-icon">▦</span>
+                  <h4>Manajemen Kategori</h4>
+                  <p>Lihat dan kelola kategori konten publikasi.</p>
+                </button>
+
+                <button class="quick-card" id="usersQuickLink" type="button">
+                  <span class="quick-card-icon">♙</span>
+                  <h4>Manajemen Pengguna</h4>
+                  <p>Lihat akun, peran, dan status pengguna sistem.</p>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Informasi Sistem</h3>
+                <p>Status ringkasan dashboard.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <p style="color:#627d98;font-size:12px;line-height:1.9;">
+                Dashboard Magelang Ekspress menggunakan Supabase untuk pengelolaan data.
+                Gunakan menu di sebelah kiri untuk membuka halaman administrasi.
+                Data ringkasan akan mengikuti data yang berhasil dibaca dari layanan terkait.
+              </p>
+            </div>
+          </section>
+        </section>
+
+        <!-- HALAMAN MANAJEMEN E-PAPER -->
+        <section class="page" id="epaperPage" data-title="Manajemen E-Paper" data-subtitle="Kelola edisi koran digital">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">Publikasi</div>
+              <h2>Manajemen E-Paper</h2>
+              <p>Kelola edisi koran digital Magelang Ekspress.</p>
+            </div>
+            <button class="btn btn-primary" id="addEpaperButton" type="button">＋ Tambah Edisi</button>
+          </div>
+
+          <div class="panel" id="epaperFormPanel" hidden>
+            <div class="panel-header">
+              <div>
+                <h3 id="epaperFormTitle">Tambah Edisi</h3>
+                <p>Isi informasi edisi yang akan dicatat.</p>
+              </div>
+              <button class="btn btn-secondary" id="cancelEpaperForm" type="button">Tutup</button>
+            </div>
+            <div class="panel-body">
+              <form id="epaperForm">
+                <div class="form-grid">
+                  <div class="form-group full">
+                    <label for="epaperTitle">Judul Edisi</label>
+                    <input class="field" id="epaperTitle" name="title" required maxlength="200"
+                      placeholder="Contoh: Edisi Percobaan Magelang Ekspress">
+                  </div>
+                  <div class="form-group">
+                    <label for="epaperPublisher">Penerbit</label>
+                    <input class="field" id="epaperPublisher" name="publisher" value="Magelang Ekspress" required
+                      maxlength="150">
+                  </div>
+                  <div class="form-group">
+                    <label for="epaperDate">Tanggal Terbit</label>
+                    <input class="field" id="epaperDate" name="publication_date" type="date" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="epaperCategory">Kategori</label>
+                    <select class="select-field" id="epaperCategory" name="category">
+                      <option value="Magelang Ekspress">Magelang Ekspress</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="epaperPremium">Jenis Akses</label>
+                    <select class="select-field" id="epaperPremium" name="is_premium">
+                      <option value="false">Gratis</option>
+                      <option value="true">Premium</option>
+                    </select>
+                  </div>
+                  <div class="form-group full">
+                    <label for="epaperPdf">File PDF (opsional)</label>
+                    <input class="field" id="epaperPdf" name="pdf_file" type="file" accept="application/pdf">
+                    <p class="form-help">Formulir ini menyiapkan input file. Pengunggahan PDF memerlukan implementasi
+                      penyimpanan yang sesuai di Supabase Storage atau backend.</p>
+                  </div>
+                  <div class="form-group full">
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                      <button class="btn btn-primary" type="submit">Simpan Edisi</button>
+                      <button class="btn btn-secondary" id="cancelEpaperFormBottom" type="button">Batal</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <div class="notice" id="epaperFormNotice" role="status"></div>
+            </div>
+          </div>
+
+          <section class="panel">
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <input class="search-field" id="epaperSearch" type="search" placeholder="Cari judul edisi..."
+                  aria-label="Cari edisi">
+              </div>
+              <div class="toolbar-right">
+                <button class="btn btn-secondary" id="refreshEpaper" type="button">↻ Muat Ulang</button>
+              </div>
+            </div>
+            <div id="epaperListContainer">
+              <div class="empty-state">
+                <strong>Halaman E-Paper siap digunakan</strong>
+                Modul JavaScript manajemen E-Paper dapat mengisi daftar data di halaman ini.
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- HALAMAN KATEGORI -->
+        <section class="page" id="categories" data-title="Kategori" data-subtitle="Kelola kategori publikasi">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">Pengelompokan Konten</div>
+              <h2>Manajemen Kategori</h2>
+              <p>Kelola kategori yang digunakan untuk mengelompokkan artikel dan publikasi.</p>
+            </div>
+            <button class="btn btn-primary" id="addCategoryButton" type="button">＋ Tambah Kategori</button>
+          </div>
+
+          <section class="panel" id="categoryFormPanel" hidden>
+            <div class="panel-header">
+              <div>
+                <h3 id="categoryFormTitle">Tambah Kategori</h3>
+                <p>Masukkan nama kategori publikasi.</p>
+              </div>
+              <button class="btn btn-secondary" id="cancelCategoryForm" type="button">Tutup</button>
+            </div>
+            <div class="panel-body">
+              <form id="categoryForm">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="categoryName">Nama Kategori</label>
+                    <input class="field" id="categoryName" name="name" required maxlength="100"
+                      placeholder="Contoh: Magelang Ekspress">
+                  </div>
+                  <div class="form-group">
+                    <label for="categoryDescription">Deskripsi</label>
+                    <input class="field" id="categoryDescription" name="description" maxlength="250"
+                      placeholder="Deskripsi kategori (opsional)">
+                  </div>
+                  <div class="form-group full">
+                    <button class="btn btn-primary" type="submit">Simpan Kategori</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <input class="search-field" id="categorySearch" type="search" placeholder="Cari kategori..."
+                  aria-label="Cari kategori">
+              </div>
+              <div class="toolbar-right">
+                <button class="btn btn-secondary" id="refreshCategories" type="button">↻ Muat Ulang</button>
+              </div>
+            </div>
+            <div id="categoriesListContainer">
+              <div class="empty-state">
+                <strong>Halaman Kategori</strong>
+                Daftar kategori akan ditampilkan oleh modul kategori.
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- HALAMAN PENGGUNA: TERPISAH DARI HALAMAN KATEGORI -->
+        <section class="page" id="usersPage" data-title="Manajemen Pengguna"
+          data-subtitle="Kelola akun dan hak akses pengguna">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">Administrasi Akun</div>
+              <h2>Manajemen Pengguna</h2>
+              <p>Kelola akun administrator, admin, dan author Magelang Ekspress.</p>
+            </div>
+            <button class="btn btn-primary" id="addUserButton" type="button">＋ Tambah Pengguna</button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">Total Pengguna</span>
+                <span class="stat-icon">♙</span>
+              </div>
+              <div class="stat-value" id="usersTotalCount">—</div>
+              <div class="stat-note">Seluruh akun yang terdaftar</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">Akun Aktif</span>
+                <span class="stat-icon">✓</span>
+              </div>
+              <div class="stat-value" id="usersActiveCount">—</div>
+              <div class="stat-note">Akun yang berstatus aktif</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">Admin</span>
+                <span class="stat-icon">⚙</span>
+              </div>
+              <div class="stat-value" id="usersAdminCount">—</div>
+              <div class="stat-note">Admin dan super admin</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">Author</span>
+                <span class="stat-icon">✎</span>
+              </div>
+              <div class="stat-value" id="usersAuthorCount">—</div>
+              <div class="stat-note">Pengguna dengan peran author</div>
+            </article>
+          </div>
+
+          <div class="notice" id="usersNotice" role="status" aria-live="polite"></div>
+
+          <section class="panel" id="userFormPanel" hidden>
+            <div class="panel-header">
+              <div>
+                <h3 id="userFormTitle">Tambah Pengguna</h3>
+                <p>Lengkapi informasi akun pengguna.</p>
+              </div>
+              <button class="btn btn-secondary" id="cancelUserForm" type="button">Tutup</button>
+            </div>
+
+            <div class="panel-body">
+              <form id="userForm">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="userFullName">Nama Lengkap</label>
+                    <input class="field" id="userFullName" name="full_name" required maxlength="150"
+                      placeholder="Nama lengkap">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="userUsername">Username</label>
+                    <input class="field" id="userUsername" name="username" required maxlength="80"
+                      autocomplete="username" placeholder="Username pengguna">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="userRole">Peran</label>
+                    <select class="select-field" id="userRole" name="role" required>
+                      <option value="author">Author</option>
+                      <option value="admin">Admin</option>
+                      <option value="super_admin">Super Admin</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="userActive">Status Akun</label>
+                    <select class="select-field" id="userActive" name="is_active">
+                      <option value="true">Aktif</option>
+                      <option value="false">Tidak Aktif</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group full">
+                    <label for="userAvatar">URL Foto Profil (opsional)</label>
+                    <input class="field" id="userAvatar" name="avatar_url" type="url" placeholder="https://...">
+                  </div>
+
+                  <div class="form-group full">
+                    <p class="form-help">
+                      Catatan: membuat akun autentikasi baru memerlukan proses Supabase Auth di sisi server atau alur
+                      undangan yang aman. Jangan menaruh service role key di HTML.
+                    </p>
+                  </div>
+
+                  <div class="form-group full">
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                      <button class="btn btn-primary" type="submit">Simpan Pengguna</button>
+                      <button class="btn btn-secondary" id="cancelUserFormBottom" type="button">Batal</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <input class="search-field" id="usersSearch" type="search" placeholder="Cari nama atau username..."
+                  aria-label="Cari pengguna">
+                <select class="select-field" id="usersRoleFilter" aria-label="Filter peran pengguna">
+                  <option value="">Semua Peran</option>
+                  <option value="super_admin">Super Admin</option>
+                  <option value="admin">Admin</option>
+                  <option value="author">Author</option>
+                </select>
+                <select class="select-field" id="usersStatusFilter" aria-label="Filter status pengguna">
+                  <option value="">Semua Status</option>
+                  <option value="true">Aktif</option>
+                  <option value="false">Tidak Aktif</option>
+                </select>
+              </div>
+
+              <div class="toolbar-right">
+                <button class="btn btn-secondary" id="refreshUsers" type="button">↻ Muat Ulang</button>
+              </div>
+            </div>
+
+            <div id="usersListContainer">
+              <div class="empty-state">
+                <strong>Data pengguna siap dimuat</strong>
+                Menghubungkan tampilan ini dengan modul pengguna dan tabel profiles Supabase.
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <div class="footer">Magelang Ekspress · Panel Administrasi · 2026</div>
       </div>
-    </header>
+    </main>
+  </div>
 
-    <div class="content">
-      <!-- DASHBOARD -->
-      <section class="page is-active" id="dashboard">
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">RINGKASAN SISTEM</p>
-            <h1>Dashboard</h1>
-            <p class="muted">Selamat datang di panel administrasi Magelang Ekspress.</p>
-          </div>
-          <button class="outline-btn" id="dashboardRefreshBtn" type="button">↻ Muat Ulang</button>
-        </div>
+  <!-- Supabase dan modul yang sudah ada -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/guard.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/epaper.js"></script>
+  <script src="js/categories.js"></script>
+  <script src="js/users.js"></script>
 
-        <div class="notice" id="dashboardNotice" role="status">
-          Dashboard administrasi Magelang Ekspress.
-        </div>
+  <script>
+    (function () {
+      "use strict";
 
-        <div class="stats-grid">
-          <article class="stat-card">
-            <div class="stat-top">
-              <span class="stat-label">Total E-Paper</span>
-              <span class="stat-icon">▤</span>
-            </div>
-            <div class="stat-number" id="totalCount">—</div>
-            <div class="stat-description">Jumlah edisi yang terdaftar</div>
-          </article>
+      const $ = (id) => document.getElementById(id);
 
-          <article class="stat-card">
-            <div class="stat-top">
-              <span class="stat-label">E-Paper Terbit</span>
-              <span class="stat-icon">✓</span>
-            </div>
-            <div class="stat-number" id="publishedCount">—</div>
-            <div class="stat-description">Edisi dengan status terbit</div>
-          </article>
+      const pages = {
+        dashboard: $("dashboard"),
+        epaper: $("epaperPage"),
+        categories: $("categories"),
+        users: $("usersPage")
+      };
 
-          <article class="stat-card">
-            <div class="stat-top">
-              <span class="stat-label">E-Paper Premium</span>
-              <span class="stat-icon">◇</span>
-            </div>
-            <div class="stat-number" id="premiumCount">—</div>
-            <div class="stat-description">Edisi khusus berbayar</div>
-          </article>
-        </div>
+      const pageTitles = {
+        dashboard: {
+          title: "Dashboard",
+          subtitle: "Ringkasan pengelolaan Magelang Ekspress"
+        },
+        epaper: {
+          title: "Manajemen E-Paper",
+          subtitle: "Kelola edisi koran digital"
+        },
+        categories: {
+          title: "Kategori",
+          subtitle: "Kelola kategori publikasi"
+        },
+        users: {
+          title: "Manajemen Pengguna",
+          subtitle: "Kelola akun dan hak akses pengguna"
+        }
+      };
 
-        <section class="panel">
-          <div class="panel-heading">
-            <div>
-              <h2>Akses Cepat</h2>
-              <p class="muted">Pilih menu untuk melanjutkan pengelolaan.</p>
-            </div>
-          </div>
+      function resolvePage(hash) {
+        switch (hash) {
+          case "#epaper":
+            return "epaper";
+          case "#categories":
+            return "categories";
+          case "#users":
+            return "users";
+          case "#dashboard":
+          case "":
+            return "dashboard";
+          default:
+            return "dashboard";
+        }
+      }
 
-          <div class="quick-grid">
-            <a href="#epaper" class="quick-card">
-              <div class="quick-icon">📰</div>
-              <h3>Manajemen E-Paper</h3>
-              <p class="muted">Lihat daftar edisi dan status publikasi koran digital.</p>
-              <span class="quick-link">Buka E-Paper →</span>
-            </a>
+      function navigate() {
+        const pageKey = resolvePage(window.location.hash);
+        const selectedPage = pages[pageKey];
 
-            <a href="#categories" class="quick-card">
-              <div class="quick-icon">▧</div>
-              <h3>Kelola Kategori</h3>
-              <p class="muted">Atur kategori konten untuk publikasi.</p>
-              <span class="quick-link">Buka Kategori →</span>
-            </a>
+        if (!selectedPage) {
+          return;
+        }
 
-            <button type="button" class="quick-card" id="usersQuickLink">
-              <div class="quick-icon">♙</div>
-              <h3>Pengguna</h3>
-              <p class="muted">Menu pengelolaan pengguna akan dikembangkan.</p>
-              <span class="quick-link">Lihat status →</span>
-            </button>
-          </div>
-        </section>
+        Object.entries(pages).forEach(([key, page]) => {
+          if (page) {
+            page.classList.toggle("is-active", key === pageKey);
+          }
+        });
 
-        <footer>© <span id="year"></span> Magelang Ekspress · Dashboard Administrasi</footer>
-      </section>
+        document.querySelectorAll(".nav-link[data-page]").forEach((link) => {
+          link.classList.toggle(
+            "is-active",
+            link.dataset.page === pageKey
+          );
+        });
 
-      <!-- MANAJEMEN E-PAPER -->
-      <section class="page" id="epaperPage">
-        <div class="page-heading">
-          <div>
-            <p class="eyebrow">PENGELOLAAN KONTEN</p>
-            <h1>Manajemen E-Paper</h1>
-            <p class="muted">Pantau dan kelola edisi koran digital Magelang Ekspress.</p>
-          </div>
+        const metadata = pageTitles[pageKey];
 
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="outline-btn" id="refreshBtn" type="button">↻ Muat Ulang</button>
-            <button class="primary-btn" id="addPublicationBtn" type="button">+ Tambah E-Paper</button>
-          </div>
-        </div>
+        $("topbarTitle").textContent = metadata.title;
+        $("topbarSubtitle").textContent = metadata.subtitle;
 
-        <div class="notice" id="apiNotice" role="status">
-          Menghubungkan ke server API...
-        </div>
+        $("sidebar").classList.remove("is-open");
 
-        <!-- Formulir dibuat oleh dashboard.js -->
+        if (pageKey === "users") {
+          window.dispatchEvent(new CustomEvent("users-page-open"));
+        }
 
-        <section class="category-card">
-          <div class="card-heading">
-            <div>
-              <h2>Daftar E-Paper</h2>
-              <p class="muted">Data ditampilkan dari API backend.</p>
-            </div>
-          </div>
+        if (pageKey === "categories") {
+          window.dispatchEvent(new CustomEvent("categories-page-open"));
+        }
 
-          <div class="table-toolbar">
-            <input class="field search-field" id="searchInput" type="search"
-              placeholder="Cari judul edisi atau penerbit..." aria-label="Cari E-Paper">
+        if (pageKey === "epaper") {
+          window.dispatchEvent(new CustomEvent("epaper-page-open"));
+        }
 
-            <select class="field filter-field" id="premiumFilter" aria-label="Filter jenis edisi">
-              <option value="">Semua jenis</option>
-              <option value="premium">Premium</option>
-              <option value="free">Reguler / Gratis</option>
-            </select>
-          </div>
+        if (pageKey === "dashboard") {
+          window.dispatchEvent(new CustomEvent("dashboard-page-open"));
+        }
+      }
 
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Judul Edisi</th>
-                  <th>Penerbit</th>
-                  <th>Tanggal Terbit</th>
-                  <th>Jenis</th>
-                  <th>Status</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="publicationRows">
-                <tr><td colspan="6">Memuat data E-Paper...</td></tr>
-              </tbody>
-            </table>
-          </div>
+      function openPage(hash) {
+        window.location.hash = hash;
+      }
 
-          <div class="table-footer">
-            <span id="resultCount">Menyiapkan data...</span>
-            <button class="outline-btn" id="exportBtn" type="button">Unduh CSV</button>
-          </div>
-        </section>
+      window.addEventListener("hashchange", navigate);
 
-        <footer>© <span id="epaperYear"></span> Magelang Ekspress · Manajemen E-Paper</footer>
-      </section>
+      $("usersQuickLink")?.addEventListener("click", function () {
+        openPage("#users");
+      });
 
-      <!-- KATEGORI -->
-      <section class="page" id="categories">
-        <div class="category-page-heading">
-          <p class="eyebrow">PENGELOLAAN KONTEN</p>
-          <h1>Kategori</h1>
-          <p class="muted">Kelola kategori konten Magelang Ekspress.</p>
-        </div>
+      $("epaperQuickLink")?.addEventListener("click", function () {
+        openPage("#epaper");
+      });
 
-        <div class="notice" id="categoryNotice" role="status"></div>
+      $("categoriesQuickLink")?.addEventListener("click", function () {
+        openPage("#categories");
+      });
 
-        <div class="category-stats">
-          <article class="category-stat">
-            <span class="stat-label">Total Kategori</span>
-            <strong id="categoryTotal">—</strong>
-          </article>
-          <article class="category-stat">
-            <span class="stat-label">Kategori Aktif</span>
-            <strong id="categoryActive">—</strong>
-          </article>
-        </div>
+      $("menuToggle")?.addEventListener("click", function () {
+        $("sidebar").classList.toggle("is-open");
+      });
 
-        <section class="category-card hidden" id="categoryFormPanel">
-          <div class="card-heading">
-            <div>
-              <h2 id="categoryFormTitle">Tambah Kategori</h2>
-              <p class="muted">Lengkapi informasi kategori di bawah ini.</p>
-            </div>
-          </div>
+      document.addEventListener("click", function (event) {
+        const sidebar = $("sidebar");
+        const toggle = $("menuToggle");
 
-          <form id="categoryForm">
-            <input type="hidden" id="categoryId" name="id">
+        if (
+          window.innerWidth <= 760 &&
+          sidebar.classList.contains("is-open") &&
+          !sidebar.contains(event.target) &&
+          !toggle.contains(event.target)
+        ) {
+          sidebar.classList.remove("is-open");
+        }
+      });
 
-            <div class="form-grid">
-              <div class="form-group">
-                <label for="categoryName">Nama kategori *</label>
-                <input class="field" id="categoryName" name="name" required maxlength="100"
-                  placeholder="Contoh: Berita Daerah">
-              </div>
+      $("refreshDashboard")?.addEventListener("click", function () {
+        window.dispatchEvent(new CustomEvent("dashboard-refresh"));
+      });
 
-              <div class="form-group">
-                <label for="categorySlug">Slug</label>
-                <input class="field" id="categorySlug" name="slug" maxlength="120"
-                  placeholder="berita-daerah">
-              </div>
+      // Jika pengguna membuka URL dengan #users, halaman pengguna langsung aktif.
+      navigate();
+    })();
+  </script>
 
-              <div class="form-group full">
-                <label for="categoryDescription">Deskripsi</label>
-                <textarea class="field" id="categoryDescription" name="description"
-                  placeholder="Deskripsi kategori (opsional)"></textarea>
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button class="primary-btn" id="saveCategoryBtn" type="submit">Simpan Kategori</button>
-              <button class="outline-btn" id="cancelCategoryBtn" type="button">Batal</button>
-            </div>
-          </form>
-        </section>
-
-        <section class="category-card">
-          <div class="card-heading">
-            <div>
-              <h2>Daftar Kategori</h2>
-              <p class="muted">Kategori yang tersimpan di sistem.</p>
-            </div>
-
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="outline-btn" id="refreshCategoriesBtn" type="button">↻ Muat Ulang</button>
-              <button class="primary-btn" id="addCategoryBtn" type="button">+ Tambah Kategori</button>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Nama Kategori</th>
-                  <th>Slug</th>
-                  <th>Deskripsi</th>
-                  <th>Status</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="categoryRows">
-                <tr><td colspan="5">Memuat kategori...</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="table-footer">
-            <span>Data kategori Magelang Ekspress</span>
-            <span id="categoryYear"></span>
-          </div>
-        </section>
-
-        <footer>© <span id="categoryFooterYear"></span> Magelang Ekspress · Manajemen Kategori</footer>
-      </section>
-    </div>
-  </main>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js"></script>
-<script src="js/guard.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/categories.js"></script>
-
-<script>
-(() => {
+  <script>
+(function () {
   "use strict";
 
+  const config = window.ADMIN_CONFIG;
+  if (!config) {
+    console.error("ADMIN_CONFIG tidak ditemukan.");
+    return;
+  }
+
   const $ = (id) => document.getElementById(id);
-  const sidebar = $("sidebar");
-  const breadcrumb = $("breadcrumb");
-  const navLinks = document.querySelectorAll(".nav-link");
 
-  const pages = {
-    dashboard: $("dashboard"),
-    epaper: $("epaperPage"),
-    categories: $("categories")
-  };
+  async function fetchData(path) {
+    const response = await fetch(
+      `${config.API_BASE_URL}${path}`,
+      {
+        headers: { Accept: "application/json" }
+      }
+    );
 
-  const year = new Date().getFullYear();
-
-  [
-    "year",
-    "epaperYear",
-    "categoryYear",
-    "categoryFooterYear",
-    "sidebarYear"
-  ].forEach((id) => {
-    const element = $(id);
-    if (element) element.textContent = year;
-  });
-
-  function navigate() {
-    const hash = window.location.hash || "#dashboard";
-
-    if (hash === "#users") {
-      alert("Menu Pengguna belum tersedia.");
-      window.location.hash = "#dashboard";
-      return;
+    if (!response.ok) {
+      throw new Error(`${path}: HTTP ${response.status}`);
     }
 
-    const pageKey =
-      hash === "#epaper" ? "epaper" :
-      hash === "#categories" ? "categories" :
-      "dashboard";
+    const payload = await response.json();
 
-    Object.entries(pages).forEach(([key, element]) => {
-      element?.classList.toggle("is-active", key === pageKey);
-    });
+    if (payload && Array.isArray(payload.data)) {
+      return payload.data;
+    }
 
-    const activeHash = `#${pageKey}`;
+    if (Array.isArray(payload)) {
+      return payload;
+    }
 
-    navLinks.forEach((link) => {
-      link.classList.toggle(
-        "active",
-        link.getAttribute("href") === activeHash
+    return [];
+  }
+
+  async function loadDashboardStats() {
+    const refreshButton = $("refreshDashboard");
+
+    if (refreshButton) {
+      refreshButton.disabled = true;
+      refreshButton.textContent = "Memuat...";
+    }
+
+    const tasks = [
+      {
+        path: "/publications",
+        element: "totalEpaper"
+      },
+      {
+        path: "/articles",
+        element: "totalArticles"
+      },
+      {
+        path: "/categories",
+        element: "totalCategories"
+      }
+    ];
+
+    try {
+      const results = await Promise.allSettled(
+        tasks.map((task) => fetchData(task.path))
       );
-    });
 
-    const title = {
-      dashboard: "Dashboard",
-      epaper: "Manajemen E-Paper",
-      categories: "Kategori"
-    }[pageKey];
+      let failures = [];
 
-    if (breadcrumb) {
-      breadcrumb.replaceChildren();
+      results.forEach((result, index) => {
+        const task = tasks[index];
+        const element = $(task.element);
 
-      const brand = document.createTextNode("Magelang Ekspress ");
-      const separator = document.createElement("span");
-      const strong = document.createElement("strong");
+        if (!element) return;
 
-      separator.textContent = "/";
-      strong.textContent = title;
+        if (result.status === "fulfilled") {
+          element.textContent = result.value.length;
+        } else {
+          failures.push(task.path);
+          console.error(
+            `Gagal memuat ${task.path}:`,
+            result.reason
+          );
+        }
+      });
 
-      breadcrumb.append(brand, separator, strong);
-    }
+      const notice = $("globalNotice");
 
-    if (pageKey === "epaper") {
-      window.dispatchEvent(new Event("epaper-page-open"));
-    }
+      if (notice) {
+        notice.classList.add("is-visible");
 
-    if (pageKey === "categories") {
-      window.dispatchEvent(new Event("categories-page-open"));
-    }
-
-    if (window.innerWidth <= 768) {
-      sidebar?.classList.remove("open");
+        if (failures.length === 0) {
+          notice.classList.remove("error");
+          notice.textContent =
+            "Statistik dashboard berhasil diperbarui.";
+        } else {
+          notice.classList.add("error");
+          notice.textContent =
+            "Sebagian statistik gagal dimuat: " +
+            failures.join(", ") +
+            ". Periksa endpoint API terkait.";
+        }
+      }
+    } finally {
+      if (refreshButton) {
+        refreshButton.disabled = false;
+        refreshButton.textContent = "↻ Perbarui Data";
+      }
     }
   }
 
-  window.addEventListener("hashchange", navigate);
+  document.addEventListener("DOMContentLoaded", () => {
+    loadDashboardStats();
 
-  $("menuToggle")?.addEventListener("click", () => {
-    sidebar?.classList.toggle("open");
+    $("refreshDashboard")?.addEventListener(
+      "click",
+      loadDashboardStats
+    );
+
+    window.addEventListener(
+      "dashboard-refresh",
+      loadDashboardStats
+    );
+
+    window.addEventListener(
+      "dashboard-page-open",
+      loadDashboardStats
+    );
   });
-
-  $("usersQuickLink")?.addEventListener("click", () => {
-    alert("Menu Pengguna belum tersedia.");
-  });
-
-  $("dashboardRefreshBtn")?.addEventListener("click", () => {
-    if (window.location.hash === "#epaper") {
-      window.dispatchEvent(new Event("epaper-page-open"));
-    } else {
-      window.location.hash = "#epaper";
-    }
-  });
-
-  navigate();
 })();
 </script>
 </body>
+
 </html>
+```

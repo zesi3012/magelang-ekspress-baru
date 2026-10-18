@@ -196,41 +196,41 @@
   // FORM TAMBAH / EDIT E-PAPER
   // =====================================================
 
-  
 
-function ensurePublicationForm() {
-  const page = $("epaperPage");
-  if (!page) return;
 
-  const toolbar = $("refreshBtn")?.parentElement;
+  function ensurePublicationForm() {
+    const page = $("epaperPage");
+    if (!page) return;
 
-  if (toolbar && !$("addPublicationBtn")) {
-    const addButton = document.createElement("button");
-    addButton.type = "button";
-    addButton.id = "addPublicationBtn";
-    addButton.className = "primary-btn";
-    addButton.textContent = "+ Tambah E-Paper";
-    toolbar.append(addButton);
-  }
+    const toolbar = $("refreshBtn")?.parentElement;
 
-  // Gunakan panel lama jika tersedia agar posisi dashboard tetap terjaga.
-  let panel = $("publicationFormPanel");
-
-  if (!panel) {
-    panel = document.createElement("section");
-    panel.id = "publicationFormPanel";
-    panel.className = "category-card hidden";
-
-    const notice = $("apiNotice");
-    if (notice) {
-      notice.insertAdjacentElement("afterend", panel);
-    } else {
-      page.prepend(panel);
+    if (toolbar && !$("addPublicationBtn")) {
+      const addButton = document.createElement("button");
+      addButton.type = "button";
+      addButton.id = "addPublicationBtn";
+      addButton.className = "primary-btn";
+      addButton.textContent = "+ Tambah E-Paper";
+      toolbar.append(addButton);
     }
-  }
 
-  // Bangun ulang isi panel agar input PDF lama tergantikan.
-  panel.innerHTML = `
+    // Gunakan panel lama jika tersedia agar posisi dashboard tetap terjaga.
+    let panel = $("publicationFormPanel");
+
+    if (!panel) {
+      panel = document.createElement("section");
+      panel.id = "publicationFormPanel";
+      panel.className = "category-card hidden";
+
+      const notice = $("apiNotice");
+      if (notice) {
+        notice.insertAdjacentElement("afterend", panel);
+      } else {
+        page.prepend(panel);
+      }
+    }
+
+    // Bangun ulang isi panel agar input PDF lama tergantikan.
+    panel.innerHTML = `
     <div class="card-heading">
       <div>
         <h2 id="publicationFormTitle">Tambah E-Paper</h2>
@@ -318,9 +318,7 @@ function ensurePublicationForm() {
       </div>
     </form>
   `;
-}
-
-
+  }
 
   function openForm(publication = null) {
     ensurePublicationForm();
@@ -353,8 +351,8 @@ function ensurePublicationForm() {
 
     $("publicationPremium").value =
       publication?.is_premium === true ||
-      publication?.is_premium === "true" ||
-      publication?.is_premium === 1
+        publication?.is_premium === "true" ||
+        publication?.is_premium === 1
         ? "true"
         : "false";
 
@@ -503,8 +501,8 @@ function ensurePublicationForm() {
         <tr>
           <td colspan="6" style="text-align:center;padding:28px">
             ${publications.length
-              ? "Tidak ada edisi yang sesuai pencarian."
-              : "Belum ada data E-Paper."}
+          ? "Tidak ada edisi yang sesuai pencarian."
+          : "Belum ada data E-Paper."}
           </td>
         </tr>
       `;
@@ -872,6 +870,38 @@ function ensurePublicationForm() {
   }
 
   // =====================================================
+  // STATISTIK DASHBOARD UTAMA
+  // =====================================================
+
+  async function loadDashboardStats() {
+    const stats = [
+      { id: "totalEpaper", path: "/admin/publications" },
+      { id: "totalArticles", path: "/articles" },
+      { id: "totalCategories", path: "/categories" }
+    ];
+
+    const results = await Promise.allSettled(
+      stats.map((item) =>
+        apiRequest(item.path, { method: "GET" })
+      )
+    );
+
+    results.forEach((result, index) => {
+      const element = $(stats[index].id);
+      if (!element) return;
+
+      if (result.status === "fulfilled") {
+        element.textContent = normalizeData(result.value).length;
+      } else {
+        element.textContent = "—";
+        console.error(
+          `Gagal memuat statistik ${stats[index].id}:`,
+          result.reason
+        );
+      }
+    });
+  }
+  // =====================================================
   // EVENT LISTENER
   // =====================================================
 
@@ -939,6 +969,7 @@ function ensurePublicationForm() {
 
     loadCategories();
     loadPublications();
+    loadDashboardStats();
   }
 
   if (document.readyState === "loading") {
