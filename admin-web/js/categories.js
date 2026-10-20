@@ -34,20 +34,34 @@
     })[char]);
   }
 
-  function showNotice(message, type = "success") {
-    const notice = $("categoryNotice");
-    if (!notice) return;
+function showNotice(message, type = "success") {
+  const notice = $("categoryNotice");
+  if (!notice) return;
 
-    notice.textContent = message;
-    notice.style.display = "block";
-    notice.style.background = type === "error" ? "#fee2e2" : "#dcfce7";
-    notice.style.color = type === "error" ? "#991b1b" : "#166534";
-  }
+  notice.textContent = message;
+  notice.hidden = false;
+  notice.style.display = "block";
+  notice.style.padding = "12px 16px";
+  notice.style.marginBottom = "16px";
+  notice.style.borderRadius = "8px";
+  notice.style.fontSize = "14px";
+  notice.style.fontWeight = "500";
+  notice.style.border = type === "error"
+    ? "1px solid #fecaca"
+    : "1px solid #bbf7d0";
+  notice.style.background = type === "error" ? "#fef2f2" : "#f0fdf4";
+  notice.style.color = type === "error" ? "#991b1b" : "#166534";
+}
 
   function hideNotice() {
-    const notice = $("categoryNotice");
-    if (notice) notice.style.display = "none";
+  const notice = $("categoryNotice");
+
+  if (notice) {
+    notice.hidden = true;
+    notice.style.display = "none";
+    notice.textContent = "";
   }
+}
 
   async function request(path, options = {}) {
     const { data, error } = await supabase.auth.getSession();
@@ -84,64 +98,104 @@
     return payload;
   }
 
-  function renderCategories() {
-    $("categoryTotal").textContent = categories.length;
-    $("categoryActive").textContent = categories.filter(
-      (item) => item.is_active === true ||
-        item.is_active === 1 ||
-        item.is_active === "1"
+  
+function renderCategories() {
+  const totalElement = $("categoryTotal");
+  const activeElement = $("categoryActive");
+  const searchElement = $("categorySearch");
+
+  const keyword = (searchElement?.value || "").trim().toLowerCase();
+
+  if (totalElement) {
+    totalElement.textContent = categories.length;
+  }
+
+  if (activeElement) {
+    activeElement.textContent = categories.filter((item) =>
+      item.is_active === true ||
+      item.is_active === 1 ||
+      item.is_active === "1"
     ).length;
+  }
 
-    if (categories.length === 0) {
-      rows.innerHTML = `
-        <tr>
-          <td colspan="5" style="padding:24px;text-align:center;color:#64748b;">
-            Belum ada kategori. Klik Tambah Kategori untuk membuat kategori pertama.
-          </td>
-        </tr>`;
-      return;
-    }
+  const filteredCategories = categories.filter((item) => {
+    const searchableText = [
+      item.name,
+      item.slug,
+      item.description
+    ].join(" ").toLowerCase();
 
-    rows.innerHTML = categories.map((item, index) => {
-      const active =
-        item.is_active === true ||
-        item.is_active === 1 ||
-        item.is_active === "1";
+    return searchableText.includes(keyword);
+  });
 
-      return `
-        <tr style="border-top:1px solid #e2e8f0;">
-          <td style="padding:12px;">${index + 1}</td>
-          <td style="padding:12px;">
-            <strong>${escapeHtml(item.name)}</strong>
-            <div style="font-size:12px;color:#64748b;margin-top:4px;">
-              ${escapeHtml(item.description || "Tidak ada deskripsi")}
-            </div>
-          </td>
-          <td style="padding:12px;">${escapeHtml(item.slug)}</td>
-          <td style="padding:12px;">
-            <span style="
-              display:inline-block;
-              padding:5px 9px;
-              border-radius:20px;
-              font-size:12px;
-              background:${active ? "#dcfce7" : "#f1f5f9"};
-              color:${active ? "#166534" : "#475569"};">
-              ${active ? "Aktif" : "Nonaktif"}
-            </span>
-          </td>
-          <td style="padding:12px;white-space:nowrap;">
-            <button type="button" data-edit="${escapeHtml(item.id)}"
-              style="padding:7px 10px;border:0;border-radius:6px;background:#dbeafe;color:#1d4ed8;cursor:pointer;">
+  if (filteredCategories.length === 0) {
+    const message = categories.length === 0
+      ? "Belum ada kategori. Klik Tambah Kategori untuk membuat kategori pertama."
+      : "Kategori yang kamu cari tidak ditemukan.";
+
+    rows.innerHTML = `
+      <tr>
+        <td colspan="5" style="padding:32px 16px;text-align:center;color:#758195;">
+          <div style="font-weight:600;color:#344054;margin-bottom:6px;">
+            ${categories.length === 0 ? "Belum Ada Kategori" : "Tidak Ada Hasil"}
+          </div>
+          ${escapeHtml(message)}
+        </td>
+      </tr>`;
+    return;
+  }
+
+  rows.innerHTML = filteredCategories.map((item, index) => {
+    const active =
+      item.is_active === true ||
+      item.is_active === 1 ||
+      item.is_active === "1";
+
+    return `
+      <tr>
+        <td>${index + 1}</td>
+
+        <td>
+          <div class="category-name-cell">
+            <strong>${escapeHtml(item.name || "-")}</strong>
+            <span>${escapeHtml(item.description || "Tidak ada deskripsi")}</span>
+          </div>
+        </td>
+
+        <td>
+          <code class="category-slug">${escapeHtml(item.slug || "-")}</code>
+        </td>
+
+        <td>
+          <span class="category-status ${active ? "is-active" : "is-inactive"}">
+            <span class="category-status-dot"></span>
+            ${active ? "Aktif" : "Nonaktif"}
+          </span>
+        </td>
+
+        <td>
+          <div class="category-actions">
+            <button
+              type="button"
+              class="category-action-btn edit"
+              data-edit="${escapeHtml(item.id)}"
+              aria-label="Edit kategori ${escapeHtml(item.name)}">
               Edit
             </button>
-            <button type="button" data-delete="${escapeHtml(item.id)}"
-              style="padding:7px 10px;border:0;border-radius:6px;background:#fee2e2;color:#b91c1c;cursor:pointer;">
+
+            <button
+              type="button"
+              class="category-action-btn delete"
+              data-delete="${escapeHtml(item.id)}"
+              aria-label="Hapus kategori ${escapeHtml(item.name)}">
               Hapus
             </button>
-          </td>
-        </tr>`;
-    }).join("");
-  }
+          </div>
+        </td>
+      </tr>`;
+  }).join("");
+}
+
 
   async function loadCategories() {
     rows.innerHTML = `
@@ -197,6 +251,7 @@
 
   $("addCategoryBtn").addEventListener("click", () => openForm());
   $("cancelCategoryBtn").addEventListener("click", closeForm);
+  $("cancelCategoryForm").addEventListener("click", closeForm);
   $("refreshCategoriesBtn").addEventListener("click", loadCategories);
 
   $("categoryName").addEventListener("input", () => {
@@ -211,6 +266,7 @@
   });
 
   $("categorySlug").addEventListener("input", () => {
+    $("categorySearch").addEventListener("input", renderCategories);
     slugEdited = true;
   });
 

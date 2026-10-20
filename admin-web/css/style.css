@@ -604,3 +604,128 @@
   }
 }
 
+/* ===== TABEL KATEGORI ===== */
+#categories #categoryRows td {
+  padding: 15px 18px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--line);
+}
+
+#categories #categoryRows tr:last-child td {
+  border-bottom: none;
+}
+
+#categories #categoryRows tr:hover {
+  background: #f8faff;
+}
+
+#categories .category-name-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 150px;
+}
+
+#categories .category-name-cell strong {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#categories .category-name-cell span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#categories .category-slug {
+  display: inline-block;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+#categories .category-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#categories .category-status.is-active {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+#categories .category-status.is-inactive {
+  background: #f2f4f7;
+  color: #475467;
+}
+
+#categories .category-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+#categories .category-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+#categories .category-action-btn {
+  padding: 7px 11px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+#categories .category-action-btn.edit {
+  color: #2459a9;
+  background: #eff6ff;
+  border-color: #dbeafe;
+}
+
+#categories .category-action-btn.edit:hover {
+  background: #dbeafe;
+}
+
+#categories .category-action-btn.delete {
+  color: #b42318;
+  background: #fef3f2;
+  border-color: #fee4e2;
+}
+
+#categories .category-action-btn.delete:hover {
+  background: #fee4e2;
+}
+
+#categories .category-action-btn:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+  #categories #categoryRows td {
+    padding: 12px;
+  }
+
+  #categories .category-actions {
+    flex-wrap: wrap;
+  }
+}
+

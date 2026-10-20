@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_screen.dart';
 import 'search_screen.dart';
@@ -20,19 +21,84 @@ class _HomeShellState extends State<HomeShell> {
 
   final Set<String> savedIds = <String>{};
 
+  static const String _savedIdsKey =
+      'magelang_ekspress_saved_ids';
+
+  bool _savedIdsLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedIds();
+  }
+
+  Future<void> _loadSavedIds() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final storedIds =
+          prefs.getStringList(_savedIdsKey) ?? <String>[];
+
+      if (!mounted) return;
+
+      setState(() {
+        savedIds
+          ..clear()
+          ..addAll(storedIds);
+        _savedIdsLoaded = true;
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        _savedIdsLoaded = true;
+      });
+
+      debugPrint('Gagal memuat bookmark: $e');
+    }
+  }
+
+  Future<void> _persistSavedIds() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setStringList(
+        _savedIdsKey,
+        savedIds.toList(),
+      );
+    } catch (e) {
+      debugPrint('Gagal menyimpan bookmark: $e');
+    }
+  }
+
   void toggleSaved(String id) {
+    if (!_savedIdsLoaded) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Tunggu sebentar, bookmark sedang dimuat.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (id.isEmpty) return;
+
     setState(() {
       if (!savedIds.add(id)) {
         savedIds.remove(id);
       }
     });
+
+    _persistSavedIds();
   }
 
   void openIssue([Map<String, dynamic>? publication]) {
     if (publication == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Pilih edisi e-paper dari daftar terlebih dahulu.'),
+          content: Text(
+            'Pilih edisi e-paper dari daftar terlebih dahulu.',
+          ),
         ),
       );
       return;
@@ -63,6 +129,15 @@ class _HomeShellState extends State<HomeShell> {
   void openArticle(Map<String, String> article) {
     final articleId = article['id'] ?? '';
 
+    if (articleId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('ID artikel tidak ditemukan.'),
+        ),
+      );
+      return;
+    }
+
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => ArticleScreen(
@@ -82,7 +157,7 @@ class _HomeShellState extends State<HomeShell> {
       ),
       SearchScreen(
         onOpenArticle: openArticle,
-        onOpenIssue: () => openIssue(),
+        onOpenIssue: (publication) => openIssue(publication),
       ),
       SavedScreen(
         savedIds: savedIds,
@@ -111,6 +186,7 @@ class _HomeShellState extends State<HomeShell> {
           ),
           NavigationDestination(
             icon: Icon(Icons.search),
+            selectedIcon: Icon(Icons.search),
             label: 'Pencarian',
           ),
           NavigationDestination(

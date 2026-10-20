@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class EpaperPdfService {
   // URL backend PHP yang sedang kamu jalankan.
   static const String _apiBaseUrl =
-    'http://192.168.0.102:8787/api';
+    'http://10.185.140.80:8787/api';
 
   static Future<String> getPdfUrl(String publicationId) async {
     final uri = Uri.parse(

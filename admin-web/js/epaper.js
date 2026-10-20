@@ -223,11 +223,11 @@
       container.innerHTML = `
         <div class="empty-state">
           <strong>${publications.length
-            ? "Edisi tidak ditemukan"
-            : "Belum ada data E-Paper"}</strong>
+          ? "Edisi tidak ditemukan"
+          : "Belum ada data E-Paper"}</strong>
           ${publications.length
-            ? "Coba kata kunci pencarian yang berbeda."
-            : "Klik Tambah Edisi untuk menambahkan koran digital."}
+          ? "Coba kata kunci pencarian yang berbeda."
+          : "Klik Tambah Edisi untuk menambahkan koran digital."}
         </div>
       `;
       return;
@@ -248,11 +248,11 @@
           </thead>
           <tbody>
             ${filtered.map((item) => {
-              const premium = isPremium(item);
-              const published = item.status === "published";
-              const hasPdf = Boolean(item.pdf_url);
+      const premium = isPremium(item);
+      const published = item.status === "published";
+      const hasPdf = Boolean(item.pdf_url);
 
-              return `
+      return `
                 <tr>
                   <td>
                     <div class="table-title">
@@ -270,9 +270,8 @@
                     </span>
                   </td>
                   <td>
-                    <span class="status ${
-                      published ? "status-published" : "status-draft"
-                    }">
+                    <span class="status ${published ? "status-published" : "status-draft"
+        }">
                       ${published ? "Terbit" : "Draft"}
                     </span>
                   </td>
@@ -292,7 +291,7 @@
                   </td>
                 </tr>
               `;
-            }).join("")}
+    }).join("")}
           </tbody>
         </table>
       </div>
@@ -367,6 +366,8 @@
     $("epaperDate").value =
       String(item?.publication_date || "").slice(0, 10);
     $("epaperPremium").value = isPremium(item) ? "true" : "false";
+    $("epaperStatus").value =
+  item?.status === "published" ? "published" : "draft";
 
     const categorySelect = $("epaperCategory");
     const categoryId = item?.category_id;
@@ -420,7 +421,7 @@
     if (!file) return null;
 
     if (!file.name.toLowerCase().endsWith(".pdf") ||
-        file.type && file.type !== "application/pdf") {
+      file.type && file.type !== "application/pdf") {
       throw new Error("File yang dipilih harus berupa PDF.");
     }
 
@@ -541,7 +542,7 @@
 
       // Status lama dipertahankan saat edit.
       // Edisi baru dibuat sebagai draft.
-      body.status = existing?.status || "draft";
+      body.status = $("epaperStatus").value;
 
       const path = editingId
         ? `/admin/publications/${encodeURIComponent(editingId)}`
@@ -694,9 +695,12 @@
     if (initialized) return;
     initialized = true;
 
-    $("addEpaperButton")?.addEventListener("click", async () => {
-      await loadCategories();
+    $("addEpaperButton")?.addEventListener("click", () => {
       openForm();
+
+      loadCategories().catch((error) => {
+        console.error("Gagal memuat kategori:", error);
+      });
     });
 
     $("cancelEpaperForm")?.addEventListener("click", closeForm);

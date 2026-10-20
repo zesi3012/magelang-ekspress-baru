@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="id">
 
@@ -624,6 +623,46 @@
       background: #fff6df;
     }
 
+    /* Dropdown Status E-Paper */
+    #epaperStatus {
+      width: 100%;
+      min-height: 44px;
+      padding: 11px 40px 11px 14px;
+      border: 1px solid #d9e2ec;
+      border-radius: 10px;
+      background-color: #ffffff;
+      color: #243b53;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364778b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #epaperStatus:hover {
+      border-color: #9fb3c8;
+    }
+
+    #epaperStatus:focus {
+      border-color: #102a43;
+      box-shadow: 0 0 0 3px rgba(16, 42, 67, 0.1);
+    }
+
+    #epaperStatus option {
+      padding: 10px;
+      background-color: #ffffff;
+      color: #243b53;
+      font-size: 13px;
+    }
+
     .role-badge {
       display: inline-block;
       padding: 5px 8px;
@@ -875,277 +914,568 @@
         grid-template-columns: 1fr;
       }
     }
-    
-/* ===== Perbaikan tabel Manajemen Pengguna ===== */
 
-#usersListContainer {
-  width: 100%;
-  min-width: 0;
-}
+    /* ===== Perbaikan tabel Manajemen Pengguna ===== */
 
-#usersListContainer .table-wrap {
-  width: 100%;
-  overflow-x: auto;
-  border-radius: 0 0 10px 10px;
-}
+    #usersListContainer {
+      width: 100%;
+      min-width: 0;
+    }
 
-#usersListContainer table {
-  width: 100%;
-  min-width: 760px;
-  border-collapse: separate;
-  border-spacing: 0;
-}
+    #usersListContainer .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 0 0 10px 10px;
+    }
 
-#usersListContainer th {
-  padding: 14px 18px;
-  text-align: left;
-  white-space: nowrap;
-}
+    #usersListContainer table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
 
-#usersListContainer td {
-  padding: 14px 18px;
-  vertical-align: middle;
-}
+    #usersListContainer th {
+      padding: 14px 18px;
+      text-align: left;
+      white-space: nowrap;
+    }
 
-#usersListContainer tbody tr {
-  transition: background-color 0.2s ease;
-}
+    #usersListContainer td {
+      padding: 14px 18px;
+      vertical-align: middle;
+    }
 
-#usersListContainer tbody tr:hover {
-  background: rgba(60, 114, 184, 0.07);
-}
+    #usersListContainer tbody tr {
+      transition: background-color 0.2s ease;
+    }
 
-#usersListContainer .actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  white-space: nowrap;
-}
+    #usersListContainer tbody tr:hover {
+      background: rgba(60, 114, 184, 0.07);
+    }
 
-#usersListContainer .actions button {
-  appearance: none;
-  border: 1px solid var(--line, #e7ebf1);
-  border-radius: 7px;
-  padding: 7px 12px;
-  font: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.4;
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
-}
+    #usersListContainer .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      white-space: nowrap;
+    }
 
-#usersListContainer .actions [data-edit-user] {
-  background: #edf4ff;
-  border-color: #c9dcfb;
-  color: #245da6;
-}
+    #usersListContainer .actions button {
+      appearance: none;
+      border: 1px solid var(--line, #e7ebf1);
+      border-radius: 7px;
+      padding: 7px 12px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
 
-#usersListContainer .actions [data-edit-user]:hover {
-  background: #dceaff;
-  border-color: #9dbfee;
-}
+    #usersListContainer .actions [data-edit-user] {
+      background: #edf4ff;
+      border-color: #c9dcfb;
+      color: #245da6;
+    }
 
-#usersListContainer .actions [data-toggle-user] {
-  background: #fff4e8;
-  border-color: #f1d2ad;
-  color: #9a5717;
-}
+    #usersListContainer .actions [data-edit-user]:hover {
+      background: #dceaff;
+      border-color: #9dbfee;
+    }
 
-#usersListContainer .actions [data-toggle-user]:hover {
-  background: #ffe8d0;
-  border-color: #e6b780;
-}
+    #usersListContainer .actions [data-toggle-user] {
+      background: #fff4e8;
+      border-color: #f1d2ad;
+      color: #9a5717;
+    }
 
-#usersListContainer .pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-}
+    #usersListContainer .actions [data-toggle-user]:hover {
+      background: #ffe8d0;
+      border-color: #e6b780;
+    }
 
-#usersListContainer .pill.published {
-  background: #e7f7ee;
-  color: #18794e;
-}
+    #usersListContainer .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
 
-#usersListContainer .pill.draft {
-  background: #f2f4f7;
-  color: #667085;
-}
+    #usersListContainer .pill.published {
+      background: #e7f7ee;
+      color: #18794e;
+    }
 
-#usersListContainer .table-footer {
-  padding: 14px 18px;
-  border-top: 1px solid var(--line, #e7ebf1);
-  color: var(--muted, #758195);
-  font-size: 13px;
-  line-height: 1.5;
-}
+    #usersListContainer .pill.draft {
+      background: #f2f4f7;
+      color: #667085;
+    }
 
-/* ===== Perapian halaman Manajemen Kategori ===== */
+    #usersListContainer .table-footer {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line, #e7ebf1);
+      color: var(--muted, #758195);
+      font-size: 13px;
+      line-height: 1.5;
+    }
 
-#categories .page-heading,
-#categoriesPage .page-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-}
+    /* ===== Perapian halaman Manajemen Kategori ===== */
 
-#categories .page-heading h2,
-#categoriesPage .page-heading h2 {
-  margin: 5px 0 8px;
-  font-size: 26px;
-  line-height: 1.3;
-  font-weight: 750;
-  color: var(--text, #243b53);
-}
+    #categories .page-heading,
+    #categoriesPage .page-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
 
-#categories .page-heading p,
-#categoriesPage .page-heading p {
-  margin: 0;
-  color: var(--muted, #8293a5);
-  font-size: 14px;
-  line-height: 1.6;
-}
+    #categories .page-heading h2,
+    #categoriesPage .page-heading h2 {
+      margin: 5px 0 8px;
+      font-size: 26px;
+      line-height: 1.3;
+      font-weight: 750;
+      color: var(--text, #243b53);
+    }
 
-#categories .eyebrow,
-#categoriesPage .eyebrow {
-  margin-bottom: 6px;
-  color: var(--blue, #1769aa);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
+    #categories .page-heading p,
+    #categoriesPage .page-heading p {
+      margin: 0;
+      color: var(--muted, #8293a5);
+      font-size: 14px;
+      line-height: 1.6;
+    }
 
-#categories .page-heading .btn,
-#categoriesPage .page-heading .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 42px;
-  padding: 11px 17px;
-  border: 1px solid var(--blue, #1769aa);
-  border-radius: 9px;
-  background: var(--blue, #1769aa);
-  color: #fff;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background .2s ease, transform .2s ease;
-}
+    #categories .eyebrow,
+    #categoriesPage .eyebrow {
+      margin-bottom: 6px;
+      color: var(--blue, #1769aa);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
 
-#categories .page-heading .btn:hover,
-#categoriesPage .page-heading .btn:hover {
-  background: var(--navy, #102a43);
-  transform: translateY(-1px);
-}
+    #categories .page-heading .btn,
+    #categoriesPage .page-heading .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 11px 17px;
+      border: 1px solid var(--blue, #1769aa);
+      border-radius: 9px;
+      background: var(--blue, #1769aa);
+      color: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s ease, transform .2s ease;
+    }
 
-#categories .panel,
-#categoriesPage .panel {
-  margin-top: 20px;
-  overflow: hidden;
-  border: 1px solid var(--border, #e4eaf1);
-  border-radius: 12px;
-  background: var(--white, #fff);
-}
+    #categories .page-heading .btn:hover,
+    #categoriesPage .page-heading .btn:hover {
+      background: var(--navy, #102a43);
+      transform: translateY(-1px);
+    }
 
-#categories .toolbar,
-#categoriesPage .toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  flex-wrap: wrap;
-  padding: 18px;
-  border-bottom: 1px solid var(--border, #e4eaf1);
-}
+    #categories .panel,
+    #categoriesPage .panel {
+      margin-top: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border, #e4eaf1);
+      border-radius: 12px;
+      background: var(--white, #fff);
+    }
 
-#categories .toolbar-left,
-#categoriesPage .toolbar-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  flex-wrap: wrap;
-  min-width: 0;
-}
+    #categories .toolbar,
+    #categoriesPage .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 18px;
+      border-bottom: 1px solid var(--border, #e4eaf1);
+    }
 
-#categories .search-field,
-#categoriesPage .search-field {
-  width: min(100%, 380px);
-  min-height: 42px;
-  padding: 10px 13px;
-  border: 1px solid var(--border, #e4eaf1);
-  border-radius: 8px;
-  background: var(--white, #fff);
-  color: var(--text, #243b53);
-  font-family: inherit;
-  font-size: 13px;
-  outline: none;
-}
+    #categories .toolbar-left,
+    #categoriesPage .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
 
-#categories .search-field:focus,
-#categoriesPage .search-field:focus {
-  border-color: var(--blue, #1769aa);
-  box-shadow: 0 0 0 3px rgba(23, 105, 170, .12);
-}
+    #categories .search-field,
+    #categoriesPage .search-field {
+      width: min(100%, 380px);
+      min-height: 42px;
+      padding: 10px 13px;
+      border: 1px solid var(--border, #e4eaf1);
+      border-radius: 8px;
+      background: var(--white, #fff);
+      color: var(--text, #243b53);
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+    }
 
-#categories .toolbar .btn,
-#categoriesPage .toolbar .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 10px 14px;
-  border: 1px solid var(--border, #e4eaf1);
-  border-radius: 8px;
-  background: var(--white, #fff);
-  color: var(--text, #243b53);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
+    #categories .search-field:focus,
+    #categoriesPage .search-field:focus {
+      border-color: var(--blue, #1769aa);
+      box-shadow: 0 0 0 3px rgba(23, 105, 170, .12);
+    }
 
-#categories .toolbar .btn:hover,
-#categoriesPage .toolbar .btn:hover {
-  background: var(--background, #f4f7fb);
-}
+    #categories .toolbar .btn,
+    #categoriesPage .toolbar .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 14px;
+      border: 1px solid var(--border, #e4eaf1);
+      border-radius: 8px;
+      background: var(--white, #fff);
+      color: var(--text, #243b53);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
-@media (max-width: 600px) {
-  #categories .page-heading,
-  #categoriesPage .page-heading {
-    align-items: stretch;
-  }
+    #categories .toolbar .btn:hover,
+    #categoriesPage .toolbar .btn:hover {
+      background: var(--background, #f4f7fb);
+    }
 
-  #categories .page-heading .btn,
-  #categoriesPage .page-heading .btn {
-    width: 100%;
-  }
+    @media (max-width: 600px) {
 
-  #categories .toolbar-left,
-  #categoriesPage .toolbar-left {
-    flex-direction: column;
-    align-items: stretch;
-  }
+      #categories .page-heading,
+      #categoriesPage .page-heading {
+        align-items: stretch;
+      }
 
-  #categories .search-field,
-  #categoriesPage .search-field {
-    width: 100%;
-  }
-}
+      #categories .page-heading .btn,
+      #categoriesPage .page-heading .btn {
+        width: 100%;
+      }
 
+      #categories .toolbar-left,
+      #categoriesPage .toolbar-left {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #categories .search-field,
+      #categoriesPage .search-field {
+        width: 100%;
+      }
+    }
+
+    /* ===== Modal Form Paket Premium ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(11, 31, 51, .55);
+      backdrop-filter: blur(3px);
+      overflow-y: auto;
+    }
+
+    .modal-overlay[hidden] {
+      display: none;
+    }
+
+    .premium-modal {
+      width: 100%;
+      max-width: 560px;
+      max-height: calc(100vh - 40px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: 14px;
+      background: var(--white);
+      box-shadow: 0 20px 60px rgba(16, 42, 67, .35);
+      animation: premiumModalIn .2s ease;
+    }
+
+    @keyframes premiumModalIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .premium-modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .premium-modal-eyebrow {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .premium-modal-header h2 {
+      color: var(--navy);
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -.4px;
+    }
+
+    .premium-modal-header p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .premium-modal-close {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      background: #fff;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .premium-modal-close:hover {
+      color: var(--navy);
+      background: #f0f5fa;
+    }
+
+    .premium-modal-body {
+      padding: 22px 24px;
+      overflow-y: auto;
+    }
+
+    .premium-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .premium-form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .premium-form-group label {
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .premium-form-group input,
+    .premium-form-group select {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 12px;
+      border: 1px solid #dbe4ed;
+      border-radius: 8px;
+      outline: none;
+      color: var(--text);
+      background: #fff;
+      font: inherit;
+      font-size: 13px;
+    }
+
+    .premium-form-group input:focus,
+    .premium-form-group select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(23, 105, 170, .1);
+    }
+
+    .premium-form-group small {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .premium-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .premium-price-input {
+      display: flex;
+      align-items: stretch;
+      border: 1px solid #dbe4ed;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .premium-price-input:focus-within {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(23, 105, 170, .1);
+    }
+
+    .premium-price-input span {
+      display: grid;
+      place-items: center;
+      padding: 0 12px;
+      color: #627d98;
+      background: #f4f7fb;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .premium-price-input input {
+      flex: 1;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      min-width: 0;
+    }
+
+    .premium-price-input input:focus {
+      box-shadow: none;
+    }
+
+    .premium-status-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #f8fafc;
+      cursor: pointer;
+    }
+
+    .premium-status-copy strong {
+      display: block;
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .premium-status-copy small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .premium-status-option input[type="checkbox"] {
+      flex: 0 0 auto;
+      width: 20px;
+      height: 20px;
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
+
+    .premium-form-error {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border: 1px solid #f1cfcc;
+      border-radius: 8px;
+      color: #a52b21;
+      background: #fff4f3;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .premium-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      background: #f8fafc;
+    }
+
+    .premium-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 18px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .premium-btn-cancel {
+      color: var(--navy);
+      border-color: var(--border);
+      background: #fff;
+    }
+
+    .premium-btn-cancel:hover {
+      background: #eef4f9;
+    }
+
+    .premium-btn-save {
+      color: #fff;
+      background: var(--navy);
+    }
+
+    .premium-btn-save:hover {
+      background: var(--blue);
+    }
+
+    .premium-btn:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+    }
+
+    @media (max-width: 560px) {
+      .premium-form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .premium-modal-header,
+      .premium-modal-body,
+      .premium-modal-footer {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+    }
   </style>
 </head>
 
@@ -1181,6 +1511,11 @@
         <a class="nav-link" href="#users" data-page="users">
           <span class="nav-icon">♙</span>
           <span>Pengguna</span>
+        </a>
+
+        <a class="nav-link" href="#premium" data-page="premium">
+          <span class="nav-icon">★</span>
+          <span>Paket Premium</span>
         </a>
       </nav>
 
@@ -1366,6 +1701,18 @@
                     <p class="form-help">Formulir ini menyiapkan input file. Pengunggahan PDF memerlukan implementasi
                       penyimpanan yang sesuai di Supabase Storage atau backend.</p>
                   </div>
+
+                  <div class="form-group">
+                    <label for="epaperStatus">Status Edisi</label>
+                    <select id="epaperStatus" name="status" required>
+                      <option value="draft">Draft</option>
+                      <option value="published">Terbit</option>
+                    </select>
+                    <small class="form-help">
+                      Pilih Terbit agar edisi langsung dipublikasikan.
+                    </small>
+                  </div>
+
                   <div class="form-group full">
                     <div style="display:flex;gap:10px;flex-wrap:wrap;">
                       <button class="btn btn-primary" type="submit">Simpan Edisi</button>
@@ -1401,62 +1748,120 @@
         <section class="page" id="categories" data-title="Kategori" data-subtitle="Kelola kategori publikasi">
           <div class="page-heading">
             <div>
-              <div class="eyebrow">Pengelompokan Konten</div>
+              <div class="eyebrow">PENGELOMPOKAN KONTEN</div>
               <h2>Manajemen Kategori</h2>
-              <p>Kelola kategori yang digunakan untuk mengelompokkan artikel dan publikasi.</p>
+              <p>Kelola kategori untuk mengelompokkan artikel dan publikasi Magelang Ekspress.</p>
             </div>
-            <button class="btn btn-primary" id="addCategoryButton" type="button">＋ Tambah Kategori</button>
+            <button class="btn btn-primary" id="addCategoryBtn" type="button">
+              + Tambah Kategori
+            </button>
+          </div>
+
+          <div id="categoryNotice" role="status" aria-live="polite" hidden></div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-label">Total Kategori</div>
+              <div class="stat-value" id="categoryTotal">0</div>
+              <div class="stat-note">Seluruh kategori terdaftar</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-label">Kategori Aktif</div>
+              <div class="stat-value" id="categoryActive">0</div>
+              <div class="stat-note">Kategori yang tersedia</div>
+            </article>
           </div>
 
           <section class="panel" id="categoryFormPanel" hidden>
             <div class="panel-header">
               <div>
                 <h3 id="categoryFormTitle">Tambah Kategori</h3>
-                <p>Masukkan nama kategori publikasi.</p>
+                <p>Lengkapi informasi kategori di bawah ini.</p>
               </div>
-              <button class="btn btn-secondary" id="cancelCategoryForm" type="button">Tutup</button>
+              <button class="btn btn-secondary" id="cancelCategoryBtn" type="button">
+                Tutup
+              </button>
             </div>
+
             <div class="panel-body">
               <form id="categoryForm">
+                <input type="hidden" id="categoryId" name="id">
+
                 <div class="form-grid">
                   <div class="form-group">
                     <label for="categoryName">Nama Kategori</label>
                     <input class="field" id="categoryName" name="name" required maxlength="100"
                       placeholder="Contoh: Magelang Ekspress">
                   </div>
+
                   <div class="form-group">
+                    <label for="categorySlug">Slug</label>
+                    <input class="field" id="categorySlug" name="slug" required maxlength="120"
+                      placeholder="magelang-ekspress">
+                    <p class="form-help">Gunakan huruf kecil, angka, dan tanda hubung.</p>
+                  </div>
+
+                  <div class="form-group full">
                     <label for="categoryDescription">Deskripsi</label>
                     <input class="field" id="categoryDescription" name="description" maxlength="250"
                       placeholder="Deskripsi kategori (opsional)">
                   </div>
-                  <div class="form-group full">
-                    <button class="btn btn-primary" type="submit">Simpan Kategori</button>
-                  </div>
+                </div>
+
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+                  <button class="btn btn-secondary" id="cancelCategoryForm" type="button">
+                    Batal
+                  </button>
+                  <button class="btn btn-primary" id="saveCategoryBtn" type="submit">
+                    Simpan
+                  </button>
                 </div>
               </form>
             </div>
           </section>
 
           <section class="panel">
-            <div class="toolbar">
-              <div class="toolbar-left">
-                <input class="search-field" id="categorySearch" type="search" placeholder="Cari kategori..."
-                  aria-label="Cari kategori">
-              </div>
-              <div class="toolbar-right">
-                <button class="btn btn-secondary" id="refreshCategories" type="button">↻ Muat Ulang</button>
+            <div class="panel-header">
+              <div>
+                <h3>Daftar Kategori</h3>
+                <p>Kelola nama, slug, status, dan tindakan setiap kategori.</p>
               </div>
             </div>
-            <div id="categoriesListContainer">
-              <div class="empty-state">
-                <strong>Halaman Kategori</strong>
-                Daftar kategori akan ditampilkan oleh modul kategori.
+
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <input class="search-field" id="categorySearch" type="search"
+                  placeholder="Cari nama atau slug kategori..." aria-label="Cari kategori">
               </div>
+              <div class="toolbar-right">
+                <button class="btn btn-secondary" id="refreshCategoriesBtn" type="button">
+                  Muat Ulang
+                </button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:65px">No.</th>
+                    <th>Nama Kategori</th>
+                    <th>Slug</th>
+                    <th>Status</th>
+                    <th style="width:150px">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="categoryRows">
+                  <tr>
+                    <td colspan="5">Memuat kategori...</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
         </section>
 
-        <!-- HALAMAN PENGGUNA: TERPISAH DARI HALAMAN KATEGORI -->
+        <!-- HALAMAN PENGGUNA -->
         <section class="page" id="usersPage" data-title="Manajemen Pengguna"
           data-subtitle="Kelola akun dan hak akses pengguna">
           <div class="page-heading">
@@ -1601,10 +2006,134 @@
           </section>
         </section>
 
+        <!-- HALAMAN PAKET PREMIUM (sejajar dengan page lain, bukan di dalam usersPage) -->
+        <section class="page" id="premiumPage" data-title="Paket Premium"
+          data-subtitle="Kelola paket langganan Premium">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">MONETISASI</div>
+              <h2>Paket Premium</h2>
+              <p>Kelola paket berlangganan Magelang Ekspress.</p>
+            </div>
+
+
+            <div class="page-actions">
+              <button class="btn btn-primary" id="addPremiumPlan" type="button">
+                + Tambah Paket
+              </button>
+
+              <button class="btn btn-secondary" id="refreshPremiumPlans" type="button">
+                ↻ Muat Ulang
+              </button>
+            </div>
+
+          </div>
+
+          <div class="notice" id="premiumNotice" role="status" aria-live="polite">
+            Memuat data paket Premium...
+          </div>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Daftar Paket Langganan</h3>
+                <p>Paket aktif yang tersedia untuk pelanggan.</p>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nama Paket</th>
+                    <th>Periode</th>
+                    <th>Durasi</th>
+                    <th>Harga</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="premiumPlanRows">
+                  <tr>
+                    <td colspan="6">Memuat paket Premium...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
         <div class="footer">Magelang Ekspress · Panel Administrasi · 2026</div>
       </div>
     </main>
   </div>
+
+  <!-- ====== MODAL FORM PAKET PREMIUM ====== -->
+  <div class="modal-overlay" id="premiumPlanModal" hidden>
+    <section class="premium-modal" role="dialog" aria-modal="true" aria-labelledby="premiumModalTitle">
+      <div class="premium-modal-header">
+        <div>
+          <span class="premium-modal-eyebrow">MANAJEMEN LANGGANAN</span>
+          <h2 id="premiumModalTitle">Tambah Paket Premium</h2>
+          <p>Atur informasi dan harga paket langganan.</p>
+        </div>
+
+        <button type="button" class="premium-modal-close" id="closePremiumModal" aria-label="Tutup">&times;</button>
+      </div>
+
+      <form id="premiumPlanForm">
+        <div class="premium-modal-body">
+          <input type="hidden" id="premiumPlanId">
+
+          <div class="premium-form-group">
+            <label for="premiumPlanName">Nama Paket</label>
+            <input id="premiumPlanName" type="text" placeholder="Contoh: Premium Bulanan" maxlength="120" required>
+          </div>
+
+          <div class="premium-form-row">
+            <div class="premium-form-group">
+              <label for="premiumPlanPeriod">Periode Langganan</label>
+              <select id="premiumPlanPeriod" required>
+                <option value="monthly">Bulanan</option>
+                <option value="yearly">Tahunan</option>
+              </select>
+            </div>
+
+            <div class="premium-form-group">
+              <label for="premiumPlanDuration">Durasi (hari)</label>
+              <input id="premiumPlanDuration" type="number" min="1" step="1" value="30" required>
+            </div>
+          </div>
+
+          <div class="premium-form-group">
+            <label for="premiumPlanPrice">Harga Paket (Rp)</label>
+            <div class="premium-price-input">
+              <span>Rp</span>
+              <input id="premiumPlanPrice" type="number" min="0" step="1" placeholder="1000000" required>
+            </div>
+            <small>Masukkan nominal harga dalam Rupiah tanpa titik atau koma.</small>
+          </div>
+
+          <label class="premium-status-option" for="premiumPlanActive">
+            <span class="premium-status-copy">
+              <strong>Aktifkan paket</strong>
+              <small>Paket aktif dapat ditampilkan kepada pengguna aplikasi.</small>
+            </span>
+            <input id="premiumPlanActive" type="checkbox" checked>
+          </label>
+
+          <p class="premium-form-error" id="premiumFormError" hidden></p>
+        </div>
+
+        <div class="premium-modal-footer">
+          <button type="button" class="premium-btn premium-btn-cancel" id="cancelPremiumModal">Batal</button>
+
+          <button type="submit" class="premium-btn premium-btn-save" id="savePremiumPlan">Simpan Paket</button>
+        </div>
+      </form>
+    </section>
+  </div>
+  <!-- ====== /MODAL FORM PAKET PREMIUM ====== -->
 
   <!-- Supabase dan modul yang sudah ada -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1614,6 +2143,7 @@
   <script src="js/epaper.js"></script>
   <script src="js/categories.js"></script>
   <script src="js/users.js"></script>
+  <script src="js/premium.js"></script>
 
   <script>
     (function () {
@@ -1625,7 +2155,8 @@
         dashboard: $("dashboard"),
         epaper: $("epaperPage"),
         categories: $("categories"),
-        users: $("usersPage")
+        users: $("usersPage"),
+        premium: $("premiumPage")
       };
 
       const pageTitles = {
@@ -1644,6 +2175,10 @@
         users: {
           title: "Manajemen Pengguna",
           subtitle: "Kelola akun dan hak akses pengguna"
+        },
+        premium: {
+          title: "Paket Premium",
+          subtitle: "Kelola paket langganan Premium"
         }
       };
 
@@ -1655,6 +2190,8 @@
             return "categories";
           case "#users":
             return "users";
+          case "#premium":
+            return "premium";
           case "#dashboard":
           case "":
             return "dashboard";
@@ -1706,6 +2243,10 @@
         if (pageKey === "dashboard") {
           window.dispatchEvent(new CustomEvent("dashboard-page-open"));
         }
+
+        if (pageKey === "premium") {
+          window.dispatchEvent(new CustomEvent("premium-page-open"));
+        }
       }
 
       function openPage(hash) {
@@ -1744,145 +2285,143 @@
         }
       });
 
-      $("refreshDashboard")?.addEventListener("click", function () {
-        window.dispatchEvent(new CustomEvent("dashboard-refresh"));
-      });
+      // Catatan: tombol #refreshDashboard ditangani di blok statistik di bawah
+      // (dashboard-refresh + dashboard-page-open). Tidak diduplikasi di sini
+      // agar tidak memicu loadDashboardStats dua kali.
 
-      // Jika pengguna membuka URL dengan #users, halaman pengguna langsung aktif.
       navigate();
     })();
   </script>
 
   <script>
-(function () {
-  "use strict";
+    (function () {
+      "use strict";
 
-  const config = window.ADMIN_CONFIG;
-  if (!config) {
-    console.error("ADMIN_CONFIG tidak ditemukan.");
-    return;
-  }
-
-  const $ = (id) => document.getElementById(id);
-
-  async function fetchData(path) {
-    const response = await fetch(
-      `${config.API_BASE_URL}${path}`,
-      {
-        headers: { Accept: "application/json" }
+      const config = window.ADMIN_CONFIG;
+      if (!config) {
+        console.error("ADMIN_CONFIG tidak ditemukan.");
+        return;
       }
-    );
 
-    if (!response.ok) {
-      throw new Error(`${path}: HTTP ${response.status}`);
-    }
+      const $ = (id) => document.getElementById(id);
 
-    const payload = await response.json();
+      async function fetchData(path) {
+        const response = await fetch(
+          `${config.API_BASE_URL}${path}`,
+          {
+            headers: { Accept: "application/json" }
+          }
+        );
 
-    if (payload && Array.isArray(payload.data)) {
-      return payload.data;
-    }
+        if (!response.ok) {
+          throw new Error(`${path}: HTTP ${response.status}`);
+        }
 
-    if (Array.isArray(payload)) {
-      return payload;
-    }
+        const payload = await response.json();
 
-    return [];
-  }
+        if (payload && Array.isArray(payload.data)) {
+          return payload.data;
+        }
 
-  async function loadDashboardStats() {
-    const refreshButton = $("refreshDashboard");
+        if (Array.isArray(payload)) {
+          return payload;
+        }
 
-    if (refreshButton) {
-      refreshButton.disabled = true;
-      refreshButton.textContent = "Memuat...";
-    }
-
-    const tasks = [
-      {
-        path: "/publications",
-        element: "totalEpaper"
-      },
-      {
-        path: "/articles",
-        element: "totalArticles"
-      },
-      {
-        path: "/categories",
-        element: "totalCategories"
+        return [];
       }
-    ];
 
-    try {
-      const results = await Promise.allSettled(
-        tasks.map((task) => fetchData(task.path))
-      );
+      async function loadDashboardStats() {
+        const refreshButton = $("refreshDashboard");
 
-      let failures = [];
+        if (refreshButton) {
+          refreshButton.disabled = true;
+          refreshButton.textContent = "Memuat...";
+        }
 
-      results.forEach((result, index) => {
-        const task = tasks[index];
-        const element = $(task.element);
+        const tasks = [
+          {
+            path: "/publications",
+            element: "totalEpaper"
+          },
+          {
+            path: "/articles",
+            element: "totalArticles"
+          },
+          {
+            path: "/categories",
+            element: "totalCategories"
+          }
+        ];
 
-        if (!element) return;
-
-        if (result.status === "fulfilled") {
-          element.textContent = result.value.length;
-        } else {
-          failures.push(task.path);
-          console.error(
-            `Gagal memuat ${task.path}:`,
-            result.reason
+        try {
+          const results = await Promise.allSettled(
+            tasks.map((task) => fetchData(task.path))
           );
+
+          let failures = [];
+
+          results.forEach((result, index) => {
+            const task = tasks[index];
+            const element = $(task.element);
+
+            if (!element) return;
+
+            if (result.status === "fulfilled") {
+              element.textContent = result.value.length;
+            } else {
+              failures.push(task.path);
+              console.error(
+                `Gagal memuat ${task.path}:`,
+                result.reason
+              );
+            }
+          });
+
+          const notice = $("globalNotice");
+
+          if (notice) {
+            notice.classList.add("is-visible");
+
+            if (failures.length === 0) {
+              notice.classList.remove("error");
+              notice.textContent =
+                "Statistik dashboard berhasil diperbarui.";
+            } else {
+              notice.classList.add("error");
+              notice.textContent =
+                "Sebagian statistik gagal dimuat: " +
+                failures.join(", ") +
+                ". Periksa endpoint API terkait.";
+            }
+          }
+        } finally {
+          if (refreshButton) {
+            refreshButton.disabled = false;
+            refreshButton.textContent = "↻ Perbarui Data";
+          }
         }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadDashboardStats();
+
+        $("refreshDashboard")?.addEventListener(
+          "click",
+          loadDashboardStats
+        );
+
+        window.addEventListener(
+          "dashboard-refresh",
+          loadDashboardStats
+        );
+
+        window.addEventListener(
+          "dashboard-page-open",
+          loadDashboardStats
+        );
       });
-
-      const notice = $("globalNotice");
-
-      if (notice) {
-        notice.classList.add("is-visible");
-
-        if (failures.length === 0) {
-          notice.classList.remove("error");
-          notice.textContent =
-            "Statistik dashboard berhasil diperbarui.";
-        } else {
-          notice.classList.add("error");
-          notice.textContent =
-            "Sebagian statistik gagal dimuat: " +
-            failures.join(", ") +
-            ". Periksa endpoint API terkait.";
-        }
-      }
-    } finally {
-      if (refreshButton) {
-        refreshButton.disabled = false;
-        refreshButton.textContent = "↻ Perbarui Data";
-      }
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    loadDashboardStats();
-
-    $("refreshDashboard")?.addEventListener(
-      "click",
-      loadDashboardStats
-    );
-
-    window.addEventListener(
-      "dashboard-refresh",
-      loadDashboardStats
-    );
-
-    window.addEventListener(
-      "dashboard-page-open",
-      loadDashboardStats
-    );
-  });
-})();
-</script>
+    })();
+  </script>
 </body>
 
 </html>
-```
